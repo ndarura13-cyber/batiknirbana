@@ -64,14 +64,3 @@ Aplikasi manajemen Surat Perintah Kerja (SPK) produksi batik berbasis cloud untu
    ```bash
    npm run build
    ```
-
----
-
-## 🌐 Panduan Deploy ke Vercel
-
-1. Buka [Vercel](https://vercel.com) dan login dengan akun GitHub Anda.
-2. Klik **"Add New"** > **"Project"**, lalu pilih repository GitHub ini.
-3. Pada bagian **Environment Variables**, tambahkan:
-   - `VITE_SUPABASE_URL` : URL proyek Supabase Anda
-   - `VITE_SUPABASE_ANON_KEY` : Anon key Supabase Anda
-4. Klik **"Deploy"**. Vercel akan otomatis mengompilasi dan menerbitkan website dalam hitungan detik.
