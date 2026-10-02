@@ -2,43 +2,23 @@ import { createClient } from '@supabase/supabase-js';
 import { SPKItem, QCRollItem, StageId, UserRole } from '../types/spk';
 
 // Kredensial Supabase terintegrasi
-const DEFAULT_SUPABASE_URL = 'https://lgxskxovlyllyslnpsci.supabase.co';
-const DEFAULT_SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxneHNreG92bHlsbHlzbG5wc2NpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA4MjI3MzMsImV4cCI6MjEwNjM5ODczM30.qJp-cFUPEYW9zyU_dZnYvLBOG9FBc5GXy03O_U57V4E';
+export const SUPABASE_URL = 'https://lgxskxovlyllyslnpsci.supabase.co';
+export const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxneHNreG92bHlsbHlzbG5wc2NpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA4MjI3MzMsImV4cCI6MjEwNjM5ODczM30.qJp-cFUPEYW9zyU_dZnYvLBOG9FBc5GXy03O_U57V4E';
 
-const envUrl = import.meta.env.VITE_SUPABASE_URL || DEFAULT_SUPABASE_URL;
-const envKey = import.meta.env.VITE_SUPABASE_ANON_KEY || DEFAULT_SUPABASE_ANON_KEY;
+const resolvedUrl = (import.meta.env.VITE_SUPABASE_URL || SUPABASE_URL).trim();
+const resolvedKey = (import.meta.env.VITE_SUPABASE_ANON_KEY || SUPABASE_ANON_KEY).trim();
 
-const getSupabaseConfig = () => {
-  let url = envUrl;
-  let key = envKey;
+export const supabase = createClient(resolvedUrl, resolvedKey);
 
-  if (!url || !key) {
-    try {
-      url = localStorage.getItem('NL_SUPABASE_URL') || DEFAULT_SUPABASE_URL;
-      key = localStorage.getItem('NL_SUPABASE_KEY') || DEFAULT_SUPABASE_ANON_KEY;
-    } catch {
-      // ignore
-    }
-  }
-
-  return { url: url.trim(), key: key.trim() };
-};
-
-const { url: initialUrl, key: initialKey } = getSupabaseConfig();
-export const supabase = (initialUrl && initialKey && initialUrl.startsWith('http'))
-  ? createClient(initialUrl, initialKey)
-  : null;
-
-export const isSupabaseConfigured = (): boolean => {
-  const { url, key } = getSupabaseConfig();
-  return Boolean(url && key && url.startsWith('http'));
-};
+export const isSupabaseConfigured = (): boolean => true;
 
 export const cleanupLegacyLocalStorage = () => {
   try {
     localStorage.removeItem('NL_SPK_MOCK_DATA');
     localStorage.removeItem('spk_items');
     localStorage.removeItem('nirbana_spk_data');
+    localStorage.removeItem('NL_SUPABASE_URL');
+    localStorage.removeItem('NL_SUPABASE_KEY');
   } catch (e) {
     console.warn('Gagal bersihkan legacy local storage:', e);
   }
@@ -48,7 +28,7 @@ export const cleanupLegacyLocalStorage = () => {
 // 1. PIN KEAMANAN PERAN (SUPABASE DATABASE)
 // ==========================================
 export const DEFAULT_PINS: Record<UserRole, string> = {
-  admin: '1234',
+  admin: '2205',
   pasar_kembang: '1111',
   bayangkara: '2222',
   nusupan: '3333',
