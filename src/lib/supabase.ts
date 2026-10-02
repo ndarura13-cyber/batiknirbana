@@ -1,9 +1,12 @@
 import { createClient } from '@supabase/supabase-js';
 import { SPKItem, QCRollItem, StageId, UserRole } from '../types/spk';
 
-// Kredensial Supabase dari .env
-const envUrl = import.meta.env.VITE_SUPABASE_URL || '';
-const envKey = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
+// Kredensial Supabase terintegrasi
+const DEFAULT_SUPABASE_URL = 'https://lgxskxovlyllyslnpsci.supabase.co';
+const DEFAULT_SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxneHNreG92bHlsbHlzbG5wc2NpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA4MjI3MzMsImV4cCI6MjEwNjM5ODczM30.qJp-cFUPEYW9zyU_dZnYvLBOG9FBc5GXy03O_U57V4E';
+
+const envUrl = import.meta.env.VITE_SUPABASE_URL || DEFAULT_SUPABASE_URL;
+const envKey = import.meta.env.VITE_SUPABASE_ANON_KEY || DEFAULT_SUPABASE_ANON_KEY;
 
 const getSupabaseConfig = () => {
   let url = envUrl;
@@ -11,8 +14,8 @@ const getSupabaseConfig = () => {
 
   if (!url || !key) {
     try {
-      url = localStorage.getItem('NL_SUPABASE_URL') || '';
-      key = localStorage.getItem('NL_SUPABASE_KEY') || '';
+      url = localStorage.getItem('NL_SUPABASE_URL') || DEFAULT_SUPABASE_URL;
+      key = localStorage.getItem('NL_SUPABASE_KEY') || DEFAULT_SUPABASE_ANON_KEY;
     } catch {
       // ignore
     }
