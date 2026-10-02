@@ -39,8 +39,8 @@ Aplikasi manajemen Surat Perintah Kerja (SPK) produksi batik berbasis cloud untu
 
 1. **Clone repository**:
    ```bash
-   git clone <URL_REPOSITORY_ANDA>
-   cd NirbanaAI
+   git clone https://github.com/ndarura13-cyber/nirbanaAI.git
+   cd nirbanaAI
    ```
 
 2. **Instal dependensi**:
