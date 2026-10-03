@@ -15,7 +15,7 @@ const NAV_LINKS = [
 ];
 
 const KEUNGGULAN = [
-  { icon: 'fa-shield-check', label: 'Quality Control' },
+  { icon: 'fa-clipboard-check', label: 'Quality Control' },
   { icon: 'fa-award', label: 'Bergaransi' },
   { icon: 'fa-gem', label: 'Premium Material' },
   { icon: 'fa-palette', label: 'Color Matches' },
