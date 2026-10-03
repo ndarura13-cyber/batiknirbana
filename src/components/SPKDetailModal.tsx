@@ -48,7 +48,7 @@ export const SPKDetailModal: React.FC<SPKDetailModalProps> = ({
   const currentStageConfig = PRODUCTION_STAGES.find(s => s.id === spk.current_stage);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/60 backdrop-blur-xs transition-all animate-fadeIn">
+    <div className="fixed inset-0 z-[80] flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/75 backdrop-blur-sm transition-all animate-fadeIn">
       {/* Slide-Up Bottom Sheet on Mobile, Centered Modal on Desktop */}
       <div className="w-full sm:max-w-xl bg-white rounded-t-3xl sm:rounded-3xl shadow-2xl border border-stone-200 overflow-hidden transform transition-all animate-slideUp sm:animate-scaleIn max-h-[92vh] flex flex-col">
         
@@ -225,58 +225,13 @@ export const SPKDetailModal: React.FC<SPKDetailModalProps> = ({
 
         </div>
 
-        {/* Footer Modal dengan Tombol Aksi */}
-        <div className="p-4 sm:px-6 bg-stone-50 border-t border-stone-200 flex flex-wrap items-center justify-between gap-2 shrink-0">
+        {/* Footer Modal dengan Tombol Aksi (Khusus Mobile vs Desktop) */}
+        <div className="p-3.5 sm:p-5 bg-stone-50 border-t border-stone-200 shrink-0 pb-5 sm:pb-5">
           
-          <div className="flex flex-wrap items-center gap-2">
-            <button
-              type="button"
-              onClick={() => {
-                onClose();
-                onPrintSPK(spk);
-              }}
-              className="flex items-center gap-1.5 px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl border border-stone-300 hover:bg-stone-100 text-stone-700 text-xs sm:text-sm font-semibold transition-all"
-            >
-              <i className="fa-solid fa-print text-stone-600 text-xs"></i>
-              <span>Cetak SPK</span>
-            </button>
-
-            {onOpenTracking && (
-              <button
-                type="button"
-                onClick={() => {
-                  onClose();
-                  onOpenTracking(spk);
-                }}
-                className="flex items-center gap-1.5 px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl border border-stone-300 hover:bg-stone-100 text-stone-700 text-xs sm:text-sm font-semibold transition-all"
-                title="Buka halaman tracking publik (hasil scan barcode)"
-              >
-                <i className="fa-solid fa-qrcode text-brand-800 text-xs"></i>
-                <span>Tracking</span>
-              </button>
-            )}
-
-            {onRequestDelete && (
-              <button
-                type="button"
-                onClick={() => {
-                  onClose();
-                  onRequestDelete(spk);
-                }}
-                className={`flex items-center gap-1.5 px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl border text-xs sm:text-sm font-bold transition-all active:scale-95 ${
-                  isAdmin 
-                    ? 'border-red-300 bg-red-50 hover:bg-red-100 text-red-700' 
-                    : 'border-stone-300 bg-stone-100 hover:bg-red-50 text-stone-600 hover:text-red-700'
-                }`}
-                title="Hapus SPK (Memerlukan Otorisasi PIN Admin)"
-              >
-                <i className={`fa-solid ${isAdmin ? 'fa-trash-can text-red-600' : 'fa-lock text-stone-400'} text-xs`}></i>
-                <span>{isAdmin ? 'Hapus SPK' : 'Hapus (PIN Admin)'}</span>
-              </button>
-            )}
-          </div>
-
-          <div className="flex items-center gap-2">
+          {/* TAMPILAN KHUSUS MOBILE (< sm): Berjenjang, Rapi, Simetris & Nyaman untuk Jempol */}
+          <div className="flex flex-col gap-2.5 sm:hidden">
+            
+            {/* 1. Tombol Aksi Utama (Lebar Penuh) */}
             {canEdit && (spk.current_stage === 3 || spk.current_stage === 4) && (
               <button
                 type="button"
@@ -284,34 +239,197 @@ export const SPKDetailModal: React.FC<SPKDetailModalProps> = ({
                   onClose();
                   onOpenQCModal(spk);
                 }}
-                className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white text-xs sm:text-sm font-bold shadow-sm transition-all"
+                className="w-full py-3.5 px-4 rounded-2xl bg-emerald-700 hover:bg-emerald-800 active:scale-[0.98] text-white text-xs font-bold shadow-md flex items-center justify-center gap-2 transition-all"
               >
-                <i className="fa-solid fa-ruler-combined text-emerald-200 text-xs"></i>
-                <span>Input QC Ukur</span>
+                <i className="fa-solid fa-ruler-combined text-emerald-200 text-sm"></i>
+                <span>Input QC Ukur Panjang Kain</span>
+                <i className="fa-solid fa-arrow-right text-emerald-200 text-xs ml-1"></i>
               </button>
             )}
 
-            {canEdit && spk.current_stage < 6 && (
+            {canEdit && spk.current_stage < 6 && spk.current_stage !== 3 && spk.current_stage !== 4 && (
               <button
                 type="button"
                 onClick={() => {
                   onClose();
                   onAdvanceStage(spk);
                 }}
-                className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-brand-900 hover:bg-black text-white text-xs sm:text-sm font-bold shadow-md transition-all"
+                className="w-full py-3.5 px-4 rounded-2xl bg-gradient-to-r from-brand-900 to-brand-800 hover:from-black hover:to-brand-950 active:scale-[0.98] text-white text-xs font-bold shadow-md flex items-center justify-center gap-2 transition-all border border-gold-300/30"
               >
-                <span>Lanjut ke Tahap {spk.current_stage + 1}</span>
+                <span>Lanjut ke Tahap {spk.current_stage + 1}: {PRODUCTION_STAGES.find(s => s.id === spk.current_stage + 1)?.name}</span>
                 <i className="fa-solid fa-arrow-right text-gold-300 text-xs"></i>
               </button>
             )}
 
-            <button
-              type="button"
-              onClick={onClose}
-              className="px-4 py-2.5 rounded-xl border border-stone-300 text-stone-700 text-xs sm:text-sm font-semibold hover:bg-stone-200 transition-colors"
-            >
-              Tutup
-            </button>
+            {spk.current_stage === 6 && (
+              <div className="w-full py-2.5 px-3 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold flex items-center justify-center gap-2">
+                <i className="fa-solid fa-circle-check text-emerald-600 text-sm"></i>
+                <span>Pesanan Selesai (Siap Kirim)</span>
+              </div>
+            )}
+
+            {!canEdit && spk.current_stage < 6 && (
+              <div className="w-full py-2 px-3 rounded-xl bg-stone-100 border border-stone-200 text-stone-500 text-[11px] font-medium flex items-center justify-center gap-1.5">
+                <i className="fa-solid fa-lock text-stone-400 text-xs"></i>
+                <span>Mode Lihat Saja (Akses PIC {spk.pabrik} / Admin)</span>
+              </div>
+            )}
+
+            {/* 2. Toolbar Aksi Sekunder: 4 Slot Grid Proporsional & Rapi */}
+            <div className="grid grid-cols-4 gap-2">
+              
+              {/* Tombol Cetak SPK */}
+              <button
+                type="button"
+                onClick={() => {
+                  onClose();
+                  onPrintSPK(spk);
+                }}
+                className="flex flex-col items-center justify-center py-2.5 px-1 min-h-[52px] rounded-xl bg-white hover:bg-stone-100 border border-stone-200 text-stone-700 active:scale-95 transition-all shadow-2xs"
+                title="Cetak SPK"
+              >
+                <i className="fa-solid fa-print text-stone-600 text-sm mb-1"></i>
+                <span className="text-[11px] font-semibold truncate w-full text-center">Cetak</span>
+              </button>
+
+              {/* Tombol Lacak Barcode */}
+              {onOpenTracking ? (
+                <button
+                  type="button"
+                  onClick={() => {
+                    onClose();
+                    onOpenTracking(spk);
+                  }}
+                  className="flex flex-col items-center justify-center py-2.5 px-1 min-h-[52px] rounded-xl bg-white hover:bg-stone-100 border border-stone-200 text-stone-700 active:scale-95 transition-all shadow-2xs"
+                  title="Tracking Barcode"
+                >
+                  <i className="fa-solid fa-qrcode text-brand-800 text-sm mb-1"></i>
+                  <span className="text-[11px] font-semibold truncate w-full text-center">Lacak</span>
+                </button>
+              ) : null}
+
+              {/* Tombol Hapus SPK */}
+              {onRequestDelete ? (
+                <button
+                  type="button"
+                  onClick={() => {
+                    onClose();
+                    onRequestDelete(spk);
+                  }}
+                  className={`flex flex-col items-center justify-center py-2.5 px-1 min-h-[52px] rounded-xl border active:scale-95 transition-all shadow-2xs ${
+                    isAdmin
+                      ? 'bg-red-50 hover:bg-red-100 border-red-200 text-red-700'
+                      : 'bg-white hover:bg-red-50 border-stone-200 text-stone-600 hover:text-red-700'
+                  }`}
+                  title="Hapus SPK"
+                >
+                  <i className={`fa-solid ${isAdmin ? 'fa-trash-can text-red-600' : 'fa-lock text-stone-400'} text-sm mb-1`}></i>
+                  <span className="text-[11px] font-bold truncate w-full text-center">{isAdmin ? 'Hapus' : 'Hapus PIN'}</span>
+                </button>
+              ) : null}
+
+              {/* Tombol Tutup */}
+              <button
+                type="button"
+                onClick={onClose}
+                className="flex flex-col items-center justify-center py-2.5 px-1 min-h-[52px] rounded-xl bg-stone-200 hover:bg-stone-300 border border-stone-300 text-stone-700 active:scale-95 transition-all"
+                title="Tutup Modal"
+              >
+                <i className="fa-solid fa-xmark text-stone-600 text-sm mb-1"></i>
+                <span className="text-[11px] font-semibold truncate w-full text-center">Tutup</span>
+              </button>
+
+            </div>
+
+          </div>
+
+          {/* TAMPILAN KHUSUS DESKTOP (sm:): Lebar, Luas & Elegan Dua Sisi */}
+          <div className="hidden sm:flex items-center justify-between gap-3">
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => {
+                  onClose();
+                  onPrintSPK(spk);
+                }}
+                className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl border border-stone-300 hover:bg-stone-100 text-stone-700 text-xs sm:text-sm font-semibold transition-all active:scale-95"
+              >
+                <i className="fa-solid fa-print text-stone-600 text-xs"></i>
+                <span>Cetak SPK</span>
+              </button>
+
+              {onOpenTracking && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    onClose();
+                    onOpenTracking(spk);
+                  }}
+                  className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl border border-stone-300 hover:bg-stone-100 text-stone-700 text-xs sm:text-sm font-semibold transition-all active:scale-95"
+                  title="Buka halaman tracking publik (hasil scan barcode)"
+                >
+                  <i className="fa-solid fa-qrcode text-brand-800 text-xs"></i>
+                  <span>Tracking</span>
+                </button>
+              )}
+
+              {onRequestDelete && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    onClose();
+                    onRequestDelete(spk);
+                  }}
+                  className={`flex items-center gap-1.5 px-4 py-2.5 rounded-xl border text-xs sm:text-sm font-bold transition-all active:scale-95 ${
+                    isAdmin 
+                      ? 'border-red-300 bg-red-50 hover:bg-red-100 text-red-700' 
+                      : 'border-stone-300 bg-stone-100 hover:bg-red-50 text-stone-600 hover:text-red-700'
+                  }`}
+                  title="Hapus SPK (Memerlukan Otorisasi PIN Admin)"
+                >
+                  <i className={`fa-solid ${isAdmin ? 'fa-trash-can text-red-600' : 'fa-lock text-stone-400'} text-xs`}></i>
+                  <span>{isAdmin ? 'Hapus SPK' : 'Hapus (PIN Admin)'}</span>
+                </button>
+              )}
+            </div>
+
+            <div className="flex items-center gap-2">
+              {canEdit && (spk.current_stage === 3 || spk.current_stage === 4) && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    onClose();
+                    onOpenQCModal(spk);
+                  }}
+                  className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white text-xs sm:text-sm font-bold shadow-sm transition-all active:scale-95"
+                >
+                  <i className="fa-solid fa-ruler-combined text-emerald-200 text-xs"></i>
+                  <span>Input QC Ukur</span>
+                </button>
+              )}
+
+              {canEdit && spk.current_stage < 6 && spk.current_stage !== 3 && spk.current_stage !== 4 && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    onClose();
+                    onAdvanceStage(spk);
+                  }}
+                  className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-brand-900 hover:bg-black text-white text-xs sm:text-sm font-bold shadow-md transition-all active:scale-95"
+                >
+                  <span>Lanjut ke Tahap {spk.current_stage + 1}</span>
+                  <i className="fa-solid fa-arrow-right text-gold-300 text-xs"></i>
+                </button>
+              )}
+
+              <button
+                type="button"
+                onClick={onClose}
+                className="px-4 py-2.5 rounded-xl border border-stone-300 text-stone-700 text-xs sm:text-sm font-semibold hover:bg-stone-200 transition-colors"
+              >
+                Tutup
+              </button>
+            </div>
           </div>
 
         </div>
