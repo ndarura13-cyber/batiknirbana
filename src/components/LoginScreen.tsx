@@ -4,6 +4,7 @@ import { apiFetchRolePins, DEFAULT_PINS } from '../lib/supabase';
 
 interface LoginScreenProps {
   onLoginSuccess: (role: UserRole, pabrik?: Pabrik) => void;
+  onBackToLanding?: () => void;
 }
 
 interface RoleOption {
@@ -20,7 +21,7 @@ const ROLES: RoleOption[] = [
   { role: 'nusupan', pabrik: 'Nusupan', label: 'Nusupan', icon: 'pabrik' },
 ];
 
-export const LoginScreen: React.FC<LoginScreenProps> = ({ onLoginSuccess }) => {
+export const LoginScreen: React.FC<LoginScreenProps> = ({ onLoginSuccess, onBackToLanding }) => {
   const [selectedRole, setSelectedRole] = useState<RoleOption>(ROLES[0]);
   const [pinInput, setPinInput] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
@@ -113,9 +114,20 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onLoginSuccess }) => {
               </p>
             </div>
           </div>
-          <div className="w-8 h-8 rounded-full bg-stone-100 flex items-center justify-center text-stone-500">
-            <i className="fa-solid fa-lock text-xs"></i>
-          </div>
+          {onBackToLanding ? (
+            <button
+              type="button"
+              onClick={(e) => { e.stopPropagation(); onBackToLanding(); }}
+              className="w-8 h-8 rounded-full bg-stone-100 hover:bg-stone-200 transition-colors flex items-center justify-center text-stone-600 shadow-sm"
+              title="Kembali ke Beranda"
+            >
+              <i className="fa-solid fa-arrow-left text-xs"></i>
+            </button>
+          ) : (
+            <div className="w-8 h-8 rounded-full bg-stone-100 flex items-center justify-center text-stone-500">
+              <i className="fa-solid fa-lock text-xs"></i>
+            </div>
+          )}
         </div>
 
         {/* Pemilih Peran Kompak (Pill-Tabs di Atas) */}
@@ -123,9 +135,6 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onLoginSuccess }) => {
           <div className="flex items-center justify-between mb-1.5 px-0.5">
             <span className="text-[10px] font-bold text-stone-400 uppercase tracking-wider">
               Pilih Posisi:
-            </span>
-            <span className="text-[11px] font-bold text-brand-900">
-              {selectedRole.label}
             </span>
           </div>
 
@@ -161,7 +170,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onLoginSuccess }) => {
             Masukkan PIN
           </h2>
           <p className="text-xs text-stone-500 mt-1">
-            Ketik 4 digit PIN keamanan untuk <strong className="text-stone-800">{selectedRole.label}</strong>
+            Ketik 4 digit PIN Anda
           </p>
         </div>
 
@@ -228,19 +237,15 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onLoginSuccess }) => {
               : 'bg-stone-200 text-stone-400 cursor-pointer hover:bg-stone-300'
               }`}
           >
-            <span>Konfirmasi & Masuk</span>
+            <span>Masuk</span>
             <i className="fa-solid fa-arrow-right text-xs"></i>
           </button>
         </form>
 
-        <p className="text-[11px] text-stone-400 mt-6 text-center">
-          Ketuk kotak di atas untuk membuka keypad angka
-        </p>
-
       </div>
 
       <p className="text-[10px] text-stone-400 mt-4 text-center">
-        Surakarta, Jawa Tengah • BATIK NIRBANA
+        Surakarta, Jawa Tengah
       </p>
 
     </div>

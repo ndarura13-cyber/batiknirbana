@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { SPKItem, UserRole, Pabrik, StageId } from './types/spk';
-import { 
-  apiFetchSPK, 
-  apiSaveSPK, 
-  apiUpdateStage, 
-  apiUpdateQC, 
+import {
+  apiFetchSPK,
+  apiSaveSPK,
+  apiUpdateStage,
+  apiUpdateQC,
   apiDeleteSPK,
   subscribeToSPKChanges,
   isSupabaseConfigured,
@@ -111,6 +111,18 @@ export const App: React.FC = () => {
       console.warn(e);
     }
     setShowLanding(false);
+  };
+
+  // Handler: Kembali ke Landing Page
+  const handleBackToLanding = () => {
+    try {
+      const url = new URL(window.location.href);
+      url.searchParams.delete('app');
+      window.history.replaceState({}, '', url.toString());
+    } catch (e) {
+      console.warn(e);
+    }
+    setShowLanding(true);
   };
 
   // State Hapus SPK Khusus Otorisasi Admin
@@ -239,9 +251,9 @@ export const App: React.FC = () => {
 
   // Handler: Simpan Hasil QC Ukur
   const handleSaveQC = async (
-    spkId: string, 
-    totalMeter: number, 
-    rollDetails: { roll: number; meter: number }[], 
+    spkId: string,
+    totalMeter: number,
+    rollDetails: { roll: number; meter: number }[],
     catatan: string
   ) => {
     const picName = currentRole === 'admin' ? 'Admin Nusantara Lestari' : `PIC ${currentPabrik || 'QC'}`;
@@ -332,7 +344,7 @@ export const App: React.FC = () => {
   const filteredSPK = spkList.filter(item => {
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase();
-      const matchSearch = 
+      const matchSearch =
         item.nomor_spk.toLowerCase().includes(q) ||
         item.nama_produksi.toLowerCase().includes(q) ||
         item.nama_pemesan.toLowerCase().includes(q) ||
@@ -398,13 +410,13 @@ export const App: React.FC = () => {
 
   // JIKA BELUM LOGIN: LAYAR LOGIN PIN WAJIB
   if (!isAuthenticated) {
-    return <LoginScreen onLoginSuccess={handleLoginSuccess} />;
+    return <LoginScreen onLoginSuccess={handleLoginSuccess} onBackToLanding={handleBackToLanding} />;
   }
 
   // JIKA SUDAH LOGIN: TAMPILKAN DASHBOARD PRODUKSI LENGKAP
   return (
     <div className="min-h-screen flex flex-col bg-[#F8F7F4] text-[#1E1E1E]">
-      
+
       {/* Header Utama Responsif */}
       <Header
         currentRole={currentRole}
@@ -418,7 +430,7 @@ export const App: React.FC = () => {
 
       {/* Konten Utama (Diberi padding bawah pb-28 di mobile agar tidak tertutup floating dock) */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-3.5 sm:px-6 lg:px-8 py-4 sm:py-8 pb-28 sm:pb-12">
-        
+
         {/* Banner Status Supabase */}
         {!isDbConnected && (
           <div className="mb-4 sm:mb-6 p-4 rounded-2xl bg-amber-50 border border-amber-300 flex items-start justify-between gap-3 text-amber-900 shadow-xs">
@@ -539,7 +551,7 @@ export const App: React.FC = () => {
         {/* PAGINATION KONTROL ELEGAN */}
         {filteredSPK.length > 0 && (
           <div className="mt-6 flex flex-col sm:flex-row items-center justify-between gap-3 bg-white p-3.5 sm:px-5 sm:py-3.5 rounded-2xl border border-stone-200/90 shadow-2xs">
-            
+
             {/* Info Jumlah & Dropdown Per Halaman */}
             <div className="flex items-center gap-2 text-xs text-stone-600">
               <span>Menampilkan {startIndex + 1}–{Math.min(startIndex + itemsPerPage, filteredSPK.length)} dari {filteredSPK.length} SPK</span>
@@ -581,11 +593,10 @@ export const App: React.FC = () => {
                       key={pageNum}
                       type="button"
                       onClick={() => setCurrentPage(pageNum)}
-                      className={`w-8 h-8 rounded-xl text-xs font-bold transition-all ${
-                        currentPage === pageNum
+                      className={`w-8 h-8 rounded-xl text-xs font-bold transition-all ${currentPage === pageNum
                           ? 'bg-brand-900 text-white shadow-xs'
                           : 'text-stone-600 hover:bg-stone-100'
-                      }`}
+                        }`}
                     >
                       {pageNum}
                     </button>
@@ -613,11 +624,10 @@ export const App: React.FC = () => {
       <button
         type="button"
         onClick={() => setIsNewSPKOpen(true)}
-        className={`hidden sm:flex items-center gap-2.5 px-5 py-3 rounded-full bg-gradient-to-r from-brand-900 via-brand-800 to-brand-900 hover:from-black hover:to-brand-950 text-white font-bold text-sm shadow-xl shadow-brand-950/30 border border-gold-300/50 fixed bottom-6 right-6 z-30 transition-all duration-300 ${
-          isTopButtonVisible
+        className={`hidden sm:flex items-center gap-2.5 px-5 py-3 rounded-full bg-gradient-to-r from-brand-900 via-brand-800 to-brand-900 hover:from-black hover:to-brand-950 text-white font-bold text-sm shadow-xl shadow-brand-950/30 border border-gold-300/50 fixed bottom-6 right-6 z-30 transition-all duration-300 ${isTopButtonVisible
             ? 'opacity-0 translate-y-8 pointer-events-none'
             : 'opacity-100 translate-y-0 active:scale-95'
-        }`}
+          }`}
         title="Buat SPK Baru"
       >
         <div className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center">
