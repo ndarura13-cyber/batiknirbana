@@ -46,7 +46,7 @@ export const DashboardSummary: React.FC<DashboardSummaryProps> = ({
 
       {/* Sticky Compressed Strip (Aktif ketika kartu metrik tertutup scroll ke bawah) */}
       <div 
-        className={`fixed top-14 sm:top-16 inset-x-0 z-20 px-3 sm:px-6 lg:px-8 max-w-7xl mx-auto transition-all duration-300 pointer-events-none no-print ${
+        className={`fixed top-16 sm:top-20 inset-x-0 z-30 px-3 sm:px-6 lg:px-8 max-w-7xl mx-auto transition-all duration-300 pointer-events-none no-print ${
           isStickyActive 
             ? 'opacity-100 translate-y-0 pointer-events-auto' 
             : 'opacity-0 -translate-y-4'

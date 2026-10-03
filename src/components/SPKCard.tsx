@@ -8,6 +8,9 @@ interface SPKCardProps {
   onPrintSPK: (spk: SPKItem) => void;
   onOpenDetail: (spk: SPKItem) => void;
   canEdit: boolean;
+  isAdmin?: boolean;
+  onDeleteSPK?: (spk: SPKItem) => void;
+  onOpenTracking?: (spk: SPKItem) => void;
 }
 
 export const SPKCard: React.FC<SPKCardProps> = ({
@@ -17,6 +20,9 @@ export const SPKCard: React.FC<SPKCardProps> = ({
   onPrintSPK,
   onOpenDetail,
   canEdit,
+  isAdmin,
+  onDeleteSPK,
+  onOpenTracking,
 }) => {
   const now = new Date();
   const deadlineDate = new Date(spk.deadline);
@@ -108,9 +114,39 @@ export const SPKCard: React.FC<SPKCardProps> = ({
             </h3>
           </div>
 
-          {/* Status Badge */}
-          <div className="flex items-center gap-1.5">
+          {/* Status Badge & Aksi Cepat */}
+          <div className="flex items-center gap-1.5 shrink-0">
             {getStatusBadge()}
+
+            {/* Tombol Preview Tracking Barcode */}
+            {onOpenTracking && (
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onOpenTracking(spk);
+                }}
+                className="p-1.5 rounded-lg text-stone-400 hover:text-brand-900 hover:bg-stone-100 transition-colors"
+                title="Buka Halaman Preview / Tracking Barcode"
+              >
+                <i className="fa-solid fa-qrcode text-xs"></i>
+              </button>
+            )}
+
+            {/* Tombol Hapus Khusus Admin Pusat */}
+            {isAdmin && onDeleteSPK && (
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onDeleteSPK(spk);
+                }}
+                className="p-1.5 rounded-lg text-stone-400 hover:text-red-600 hover:bg-red-50 transition-colors"
+                title="Hapus SPK (Memerlukan Otorisasi PIN Admin)"
+              >
+                <i className="fa-solid fa-trash-can text-xs"></i>
+              </button>
+            )}
           </div>
         </div>
 

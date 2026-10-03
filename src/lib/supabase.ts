@@ -255,3 +255,64 @@ export const subscribeToSPKChanges = (onUpdate: () => void) => {
     return () => {};
   }
 };
+
+// Ambil 1 data SPK berdasarkan Nomor SPK atau ID (Untuk Halaman Tracking Barcode)
+export const apiFetchSPKByNumber = async (nomorOrId: string): Promise<SPKItem | null> => {
+  if (!supabase || !nomorOrId) return null;
+
+  try {
+    const cleanQuery = nomorOrId.trim();
+    
+    // Coba cari berdasarkan nomor_spk terlebih dahulu
+    const { data: byNomor, error: errNomor } = await supabase
+      .from('spk')
+      .select('*')
+      .ilike('nomor_spk', cleanQuery)
+      .maybeSingle();
+
+    if (byNomor && !errNomor) {
+      return byNomor as SPKItem;
+    }
+
+    // Jika tidak ditemukan, coba cari berdasarkan UUID id
+    const { data: byId, error: errId } = await supabase
+      .from('spk')
+      .select('*')
+      .eq('id', cleanQuery)
+      .maybeSingle();
+
+    if (byId && !errId) {
+      return byId as SPKItem;
+    }
+
+    return null;
+  } catch (err) {
+    console.error('Exception fetch SPK by number:', err);
+    return null;
+  }
+};
+
+// Hapus SPK Permanen dari Supabase (Khusus Otorisasi Admin Pusat)
+export const apiDeleteSPK = async (id: string): Promise<{ success: boolean; error?: string }> => {
+  if (!supabase) {
+    return { success: false, error: 'Klien Supabase belum terhubung.' };
+  }
+
+  try {
+    const { error } = await supabase
+      .from('spk')
+      .delete()
+      .eq('id', id);
+
+    if (error) {
+      console.error('Gagal hapus SPK dari Supabase:', error.message);
+      return { success: false, error: error.message };
+    }
+
+    return { success: true };
+  } catch (err: any) {
+    console.error('Exception delete SPK:', err);
+    return { success: false, error: err?.message || 'Terjadi kesalahan sistem saat menghapus SPK' };
+  }
+};
+

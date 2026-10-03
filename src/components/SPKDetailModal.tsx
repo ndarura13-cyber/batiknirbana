@@ -9,6 +9,9 @@ interface SPKDetailModalProps {
   onAdvanceStage: (spk: SPKItem) => void;
   onOpenQCModal: (spk: SPKItem) => void;
   canEdit: boolean;
+  isAdmin?: boolean;
+  onRequestDelete?: (spk: SPKItem) => void;
+  onOpenTracking?: (spk: SPKItem) => void;
 }
 
 export const SPKDetailModal: React.FC<SPKDetailModalProps> = ({
@@ -19,6 +22,9 @@ export const SPKDetailModal: React.FC<SPKDetailModalProps> = ({
   onAdvanceStage,
   onOpenQCModal,
   canEdit,
+  isAdmin,
+  onRequestDelete,
+  onOpenTracking,
 }) => {
   if (!isOpen || !spk) return null;
 
@@ -222,17 +228,53 @@ export const SPKDetailModal: React.FC<SPKDetailModalProps> = ({
         {/* Footer Modal dengan Tombol Aksi */}
         <div className="p-4 sm:px-6 bg-stone-50 border-t border-stone-200 flex flex-wrap items-center justify-between gap-2 shrink-0">
           
-          <button
-            type="button"
-            onClick={() => {
-              onClose();
-              onPrintSPK(spk);
-            }}
-            className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl border border-stone-300 hover:bg-stone-100 text-stone-700 text-xs sm:text-sm font-semibold transition-all"
-          >
-            <i className="fa-solid fa-print text-stone-600 text-xs"></i>
-            <span>Cetak SPK (PDF)</span>
-          </button>
+          <div className="flex flex-wrap items-center gap-2">
+            <button
+              type="button"
+              onClick={() => {
+                onClose();
+                onPrintSPK(spk);
+              }}
+              className="flex items-center gap-1.5 px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl border border-stone-300 hover:bg-stone-100 text-stone-700 text-xs sm:text-sm font-semibold transition-all"
+            >
+              <i className="fa-solid fa-print text-stone-600 text-xs"></i>
+              <span>Cetak SPK</span>
+            </button>
+
+            {onOpenTracking && (
+              <button
+                type="button"
+                onClick={() => {
+                  onClose();
+                  onOpenTracking(spk);
+                }}
+                className="flex items-center gap-1.5 px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl border border-stone-300 hover:bg-stone-100 text-stone-700 text-xs sm:text-sm font-semibold transition-all"
+                title="Buka halaman tracking publik (hasil scan barcode)"
+              >
+                <i className="fa-solid fa-qrcode text-brand-800 text-xs"></i>
+                <span>Tracking</span>
+              </button>
+            )}
+
+            {onRequestDelete && (
+              <button
+                type="button"
+                onClick={() => {
+                  onClose();
+                  onRequestDelete(spk);
+                }}
+                className={`flex items-center gap-1.5 px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl border text-xs sm:text-sm font-bold transition-all active:scale-95 ${
+                  isAdmin 
+                    ? 'border-red-300 bg-red-50 hover:bg-red-100 text-red-700' 
+                    : 'border-stone-300 bg-stone-100 hover:bg-red-50 text-stone-600 hover:text-red-700'
+                }`}
+                title="Hapus SPK (Memerlukan Otorisasi PIN Admin)"
+              >
+                <i className={`fa-solid ${isAdmin ? 'fa-trash-can text-red-600' : 'fa-lock text-stone-400'} text-xs`}></i>
+                <span>{isAdmin ? 'Hapus SPK' : 'Hapus (PIN Admin)'}</span>
+              </button>
+            )}
+          </div>
 
           <div className="flex items-center gap-2">
             {canEdit && (spk.current_stage === 3 || spk.current_stage === 4) && (

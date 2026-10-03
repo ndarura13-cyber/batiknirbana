@@ -17,9 +17,9 @@ export const SPKPrintView: React.FC<SPKPrintViewProps> = ({
 
   useEffect(() => {
     if (spk) {
-      const trackingUrl = `${window.location.origin}?spk=${spk.nomor_spk}`;
+      const trackingUrl = `${window.location.origin}/?spk=${encodeURIComponent(spk.nomor_spk)}`;
       QRCode.toDataURL(trackingUrl, {
-        width: 120,
+        width: 140,
         margin: 1,
         color: {
           dark: '#1e1e1e',
@@ -187,14 +187,57 @@ export const SPKPrintView: React.FC<SPKPrintViewProps> = ({
         </div>
 
         {/* 4. LAMPIRAN GAMBAR MOTIF BATIK (Proporsional Pas 1 Lembar) */}
-        <div className="mt-3 flex flex-col items-center justify-center">
+        <div className="mt-2.5 flex flex-col items-center justify-center">
           <div className="border border-stone-400 p-1 bg-white max-w-full">
             <img
               src={spk.foto_motif_url || '/batik_parang_kusuma.png'}
               alt={`Motif ${spk.nama_produksi}`}
-              className="w-full max-h-[140mm] sm:max-h-[145mm] object-contain block mx-auto"
+              className="w-full max-h-[120mm] sm:max-h-[125mm] object-contain block mx-auto"
             />
           </div>
+        </div>
+
+        {/* 5. FOOTER RESMI DENGAN BARCODE DI SUDUT BAWAH DOKUMEN SPK */}
+        <div className="mt-2.5 pt-2 border-t border-black flex items-center justify-between text-black">
+          {/* Sudut Kiri Bawah: Barcode Pelacak */}
+          {qrCodeDataUrl && (
+            <div className="flex items-center gap-1.5 shrink-0">
+              <img
+                src={qrCodeDataUrl}
+                alt="QR Code Lacak SPK"
+                className="w-11 h-11 sm:w-12 sm:h-12 border border-stone-400 rounded p-0.5"
+              />
+              <div className="text-[8px] font-mono leading-tight text-stone-800">
+                <span className="font-bold block uppercase">Scan Lacak SPK</span>
+                <span className="text-[7.5px] text-stone-600">Batik Nirbana</span>
+              </div>
+            </div>
+          )}
+
+          {/* Keterangan Tengah */}
+          <div className="text-center text-[8.5px] text-stone-700 font-sans px-2">
+            <span className="font-bold block text-stone-900 uppercase">
+              Dokumen Resmi Surat Perintah Kerja (SPK) • Nusantara Lestari
+            </span>
+            <span className="text-[8px] text-stone-600">
+              Surakarta • Scan barcode di sudut untuk melihat progres & spesifikasi pengerjaan
+            </span>
+          </div>
+
+          {/* Sudut Kanan Bawah: Barcode Pelacak */}
+          {qrCodeDataUrl && (
+            <div className="flex items-center gap-1.5 shrink-0 text-right">
+              <div className="text-[8px] font-mono leading-tight text-stone-800">
+                <span className="font-bold block uppercase">Scan Lacak SPK</span>
+                <span className="text-[7.5px] text-stone-600 truncate max-w-[90px]">{spk.nomor_spk}</span>
+              </div>
+              <img
+                src={qrCodeDataUrl}
+                alt="QR Code Lacak SPK"
+                className="w-11 h-11 sm:w-12 sm:h-12 border border-stone-400 rounded p-0.5"
+              />
+            </div>
+          )}
         </div>
 
       </div>

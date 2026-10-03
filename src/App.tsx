@@ -5,6 +5,7 @@ import {
   apiSaveSPK, 
   apiUpdateStage, 
   apiUpdateQC, 
+  apiDeleteSPK,
   subscribeToSPKChanges,
   isSupabaseConfigured,
   cleanupLegacyLocalStorage
@@ -21,6 +22,8 @@ import { DatabaseSettingsModal } from './components/DatabaseSettingsModal';
 import { LogoutConfirmationModal } from './components/LogoutConfirmationModal';
 import { LoginScreen } from './components/LoginScreen';
 import { BottomNavDock } from './components/BottomNavDock';
+import { SPKPublicPreview } from './components/SPKPublicPreview';
+import { AdminDeleteConfirmationModal } from './components/AdminDeleteConfirmationModal';
 
 export const App: React.FC = () => {
   // Sesi Keamanan Login PIN Wajib
@@ -74,6 +77,25 @@ export const App: React.FC = () => {
   const [selectedSPKForQC, setSelectedSPKForQC] = useState<SPKItem | null>(null);
   const [selectedSPKForPrint, setSelectedSPKForPrint] = useState<SPKItem | null>(null);
   const [selectedSPKForDetail, setSelectedSPKForDetail] = useState<SPKItem | null>(null);
+
+  // Status Parameter Halaman Tracking Barcode / Preview Publik
+  const [publicSpkParam, setPublicSpkParam] = useState<string | null>(() => {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      return params.get('spk') || params.get('preview') || null;
+    } catch {
+      return null;
+    }
+  });
+
+  // State Hapus SPK Khusus Otorisasi Admin
+  const [spkToDelete, setSpkToDelete] = useState<SPKItem | null>(null);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+
+  // Reset pagination ke halaman 1 saat filter atau pencarian berubah
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery, selectedFilter]);
 
   const isDbConnected = isSupabaseConfigured();
 
@@ -239,6 +261,48 @@ export const App: React.FC = () => {
     setCurrentPabrik(pabrik);
   };
 
+  // Handler: Buka Halaman Tracking Preview (Hasil Scan Barcode)
+  const handleOpenTrackingPreview = (spk: SPKItem) => {
+    setPublicSpkParam(spk.nomor_spk);
+    try {
+      const url = new URL(window.location.href);
+      url.searchParams.set('spk', spk.nomor_spk);
+      window.history.pushState({}, '', url.toString());
+    } catch {
+      // ignore
+    }
+  };
+
+  const handleBackToApp = () => {
+    setPublicSpkParam(null);
+    try {
+      const url = new URL(window.location.href);
+      url.searchParams.delete('spk');
+      url.searchParams.delete('preview');
+      window.history.pushState({}, '', url.pathname);
+    } catch {
+      // ignore
+    }
+  };
+
+  // Handler: Hapus SPK (Otorisasi PIN Admin Pusat)
+  const handleRequestDelete = (spk: SPKItem) => {
+    setSpkToDelete(spk);
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleConfirmDelete = async (spkId: string): Promise<boolean> => {
+    const res = await apiDeleteSPK(spkId);
+    if (res.success) {
+      setSpkList(prev => prev.filter(item => item.id !== spkId));
+      if (selectedSPKForDetail?.id === spkId) setSelectedSPKForDetail(null);
+      if (selectedSPKForQC?.id === spkId) setSelectedSPKForQC(null);
+      if (selectedSPKForPrint?.id === spkId) setSelectedSPKForPrint(null);
+      return true;
+    }
+    return false;
+  };
+
   // Filter List SPK
   const filteredSPK = spkList.filter(item => {
     if (searchQuery.trim()) {
@@ -291,6 +355,16 @@ export const App: React.FC = () => {
     const diffDays = Math.ceil((deadline.getTime() - now.getTime()) / (1000 * 3600 * 24));
     return diffDays <= 2;
   }).length;
+
+  // JIKA MEMBUKA LINK TRACKING BARCODE / PREVIEW PUBLIK (Dapat dibuka tanpa login)
+  if (publicSpkParam) {
+    return (
+      <SPKPublicPreview
+        nomorSpk={publicSpkParam}
+        onBackToApp={handleBackToApp}
+      />
+    );
+  }
 
   // JIKA BELUM LOGIN: LAYAR LOGIN PIN WAJIB
   if (!isAuthenticated) {
@@ -424,6 +498,9 @@ export const App: React.FC = () => {
                 onPrintSPK={(item) => setSelectedSPKForPrint(item)}
                 onOpenDetail={(item) => setSelectedSPKForDetail(item)}
                 canEdit={canUserEdit(spk)}
+                isAdmin={currentRole === 'admin'}
+                onDeleteSPK={handleRequestDelete}
+                onOpenTracking={handleOpenTrackingPreview}
               />
             ))}
           </div>
@@ -565,6 +642,9 @@ export const App: React.FC = () => {
         onAdvanceStage={handleAdvanceStage}
         onOpenQCModal={(item) => setSelectedSPKForQC(item)}
         canEdit={selectedSPKForDetail ? canUserEdit(selectedSPKForDetail) : false}
+        isAdmin={currentRole === 'admin'}
+        onRequestDelete={handleRequestDelete}
+        onOpenTracking={handleOpenTrackingPreview}
       />
 
       <SPKPrintView
@@ -592,6 +672,16 @@ export const App: React.FC = () => {
         onClose={() => setIsLogoutConfirmOpen(false)}
         onConfirm={handleConfirmLogout}
         roleTitle={currentRole === 'admin' ? 'Admin Pusat' : `PIC ${currentPabrik || 'Pabrik'}`}
+      />
+
+      <AdminDeleteConfirmationModal
+        isOpen={isDeleteModalOpen}
+        onClose={() => {
+          setIsDeleteModalOpen(false);
+          setSpkToDelete(null);
+        }}
+        spk={spkToDelete}
+        onConfirmDelete={handleConfirmDelete}
       />
 
     </div>
