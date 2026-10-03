@@ -217,7 +217,7 @@ export const SPKCard: React.FC<SPKCardProps> = ({
             return (
               <div 
                 key={stage.id} 
-                className="relative z-10 flex flex-col items-center group cursor-pointer"
+                className="relative z-1 flex flex-col items-center group cursor-pointer"
                 onClick={() => {
                   if (!canEdit) return;
                   if (stage.id === 4) onOpenQCModal(spk);
