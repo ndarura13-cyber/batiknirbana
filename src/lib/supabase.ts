@@ -316,3 +316,35 @@ export const apiDeleteSPK = async (id: string): Promise<{ success: boolean; erro
   }
 };
 
+// ==========================================
+// GALERI PUBLIK (Landing Page — Tanpa Login)
+// ==========================================
+export interface PublicGalleryItem {
+  id: string;
+  nama_produksi: string;
+  foto_motif_url: string;
+}
+
+export const apiFetchPublicGallery = async (limit = 20): Promise<PublicGalleryItem[]> => {
+  if (!supabase) return [];
+
+  try {
+    const { data, error } = await supabase
+      .from('spk')
+      .select('id, nama_produksi, foto_motif_url')
+      .not('foto_motif_url', 'is', null)
+      .neq('foto_motif_url', '')
+      .order('created_at', { ascending: false })
+      .limit(limit);
+
+    if (error) {
+      console.warn('Galeri publik tidak tersedia:', error.message);
+      return [];
+    }
+
+    return (data || []) as PublicGalleryItem[];
+  } catch (err) {
+    console.warn('Exception fetch galeri publik:', err);
+    return [];
+  }
+};

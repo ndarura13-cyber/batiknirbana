@@ -24,6 +24,7 @@ import { LoginScreen } from './components/LoginScreen';
 import { BottomNavDock } from './components/BottomNavDock';
 import { SPKPublicPreview } from './components/SPKPublicPreview';
 import { AdminDeleteConfirmationModal } from './components/AdminDeleteConfirmationModal';
+import { LandingPage } from './components/LandingPage';
 
 export const App: React.FC = () => {
   // Sesi Keamanan Login PIN Wajib
@@ -87,6 +88,30 @@ export const App: React.FC = () => {
       return null;
     }
   });
+
+  // Landing Page vs App routing: tampilkan landing jika tidak ada param ?app=1 / ?spk=
+  const [showLanding, setShowLanding] = useState<boolean>(() => {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const hasAppParam = params.get('app') === '1';
+      const hasSpkParam = !!(params.get('spk') || params.get('preview'));
+      return !hasAppParam && !hasSpkParam;
+    } catch {
+      return true;
+    }
+  });
+
+  // Handler: Masuk ke Sistem SPK dari Landing Page
+  const handleEnterApp = () => {
+    try {
+      const url = new URL(window.location.href);
+      url.searchParams.set('app', '1');
+      window.history.replaceState({}, '', url.toString());
+    } catch (e) {
+      console.warn(e);
+    }
+    setShowLanding(false);
+  };
 
   // State Hapus SPK Khusus Otorisasi Admin
   const [spkToDelete, setSpkToDelete] = useState<SPKItem | null>(null);
@@ -355,6 +380,11 @@ export const App: React.FC = () => {
     const diffDays = Math.ceil((deadline.getTime() - now.getTime()) / (1000 * 3600 * 24));
     return diffDays <= 2;
   }).length;
+
+  // JIKA MEMBUKA LANDING PAGE (URL tidak memiliki ?app=1 atau ?spk=)
+  if (showLanding) {
+    return <LandingPage onEnterApp={handleEnterApp} />;
+  }
 
   // JIKA MEMBUKA LINK TRACKING BARCODE / PREVIEW PUBLIK (Dapat dibuka tanpa login)
   if (publicSpkParam) {

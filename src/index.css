@@ -73,6 +73,28 @@
   animation: shake 0.35s ease-in-out;
 }
 
+/* Landing Page: Slide Down untuk mobile nav dropdown */
+@keyframes slideDown {
+  0% {
+    transform: translateY(-8px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.animate-slideDown {
+  animation: slideDown 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Landing Page: Smooth scroll behavior global */
+html {
+  scroll-behavior: smooth;
+}
+
+
 /* Print Styling Anti-Terpotong & Pas 1 Halaman A4 */
 @media print {
   @page {
