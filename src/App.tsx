@@ -262,7 +262,7 @@ export const App: React.FC = () => {
       if (item.id === spkId) {
         return {
           ...item,
-          current_stage: 5,
+          current_stage: 6,
           qc_meter_riil: totalMeter,
           qc_roll_details: rollDetails,
           qc_catatan: catatan,

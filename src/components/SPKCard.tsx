@@ -220,7 +220,7 @@ export const SPKCard: React.FC<SPKCardProps> = ({
                 className="relative z-1 flex flex-col items-center group cursor-pointer"
                 onClick={() => {
                   if (!canEdit) return;
-                  if (stage.id === 4) onOpenQCModal(spk);
+                  if (stage.id === 5) onOpenQCModal(spk);
                 }}
                 title={`${stage.name} - ${stage.description}`}
               >
@@ -294,7 +294,7 @@ export const SPKCard: React.FC<SPKCardProps> = ({
           {canEdit && spk.current_stage < 6 && (
             <button
               onClick={() => {
-                if (spk.current_stage === 3 || spk.current_stage === 4) {
+                if (spk.current_stage === 5) {
                   onOpenQCModal(spk);
                 } else {
                   onAdvanceStage(spk);
@@ -302,7 +302,7 @@ export const SPKCard: React.FC<SPKCardProps> = ({
               }}
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-stone-900 hover:bg-black text-white text-xs font-bold shadow-xs transition-all active:scale-95"
             >
-              <span>{spk.current_stage === 3 || spk.current_stage === 4 ? 'QC Ukur' : 'Lanjut'}</span>
+              <span>{spk.current_stage === 5 ? 'Input QC' : 'Lanjut'}</span>
               <i className="fa-solid fa-arrow-right text-gold-300 text-[10px]"></i>
             </button>
           )}

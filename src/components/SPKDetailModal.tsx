@@ -213,7 +213,7 @@ export const SPKDetailModal: React.FC<SPKDetailModalProps> = ({
           ) : (
             <div className="p-3 bg-stone-50 rounded-xl border border-dashed border-stone-300 text-center text-stone-500 text-xs">
               <i className="fa-solid fa-ruler text-stone-400 mr-1.5"></i>
-              QC Ukur belum dilaksanakan (akan dilakukan di Tahap 4 di Pabrik)
+              QC Ukur belum dilaksanakan (akan dilakukan di Tahap 5 di Pabrik)
             </div>
           )}
 
@@ -225,7 +225,7 @@ export const SPKDetailModal: React.FC<SPKDetailModalProps> = ({
           <div className="flex flex-col gap-2.5">
             
             {/* 1. Tombol Aksi Utama (Lebar Penuh) */}
-            {canEdit && (spk.current_stage === 3 || spk.current_stage === 4) && (
+            {canEdit && spk.current_stage === 5 && (
               <button
                 type="button"
                 onClick={() => {
@@ -240,7 +240,7 @@ export const SPKDetailModal: React.FC<SPKDetailModalProps> = ({
               </button>
             )}
 
-            {canEdit && spk.current_stage < 6 && spk.current_stage !== 3 && spk.current_stage !== 4 && (
+            {canEdit && spk.current_stage < 6 && spk.current_stage !== 5 && (
               <button
                 type="button"
                 onClick={() => {
