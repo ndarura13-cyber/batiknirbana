@@ -71,7 +71,7 @@ export const QCModal: React.FC<QCModalProps> = ({
             <div className="flex items-center gap-2">
               <i className="fa-solid fa-ruler-combined text-emerald-200 text-base"></i>
               <h2 className="text-base sm:text-lg font-bold tracking-tight">
-                Pemeriksaan QC Ukur Meter Riil
+                Pemeriksaan QC Ukur
               </h2>
             </div>
             <p className="text-xs text-emerald-100 mt-0.5">
@@ -105,7 +105,7 @@ export const QCModal: React.FC<QCModalProps> = ({
           <div>
             <div className="flex items-center justify-between mb-2">
               <label className="text-xs font-bold text-stone-700">
-                Rincian Roll Kain Hasil Cetak:
+                Rincian Roll:
               </label>
               <button
                 type="button"
@@ -154,7 +154,7 @@ export const QCModal: React.FC<QCModalProps> = ({
             <div className="flex items-center justify-between">
               <div>
                 <span className="text-xs text-emerald-800 font-semibold block">
-                  Total Meter Riil (QC):
+                  Total QC:
                 </span>
                 <span className="text-2xl font-black text-emerald-950">
                   {totalMeter} Meter
@@ -172,11 +172,11 @@ export const QCModal: React.FC<QCModalProps> = ({
           {/* Catatan QC */}
           <div>
             <label className="block text-xs font-semibold text-stone-700 mb-1">
-              Catatan Kondisi Fisik Kain (Opsional):
+              Catatan (Opsional):
             </label>
             <input
               type="text"
-              placeholder="Contoh: Warna rata sempurna, tanpa cacat motif atau kotoran"
+              placeholder="Misal: Warna rata sempurna..."
               value={catatan}
               onChange={(e) => setCatatan(e.target.value)}
               className="w-full px-3.5 py-2 rounded-xl border border-stone-300 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-emerald-600"
@@ -198,7 +198,7 @@ export const QCModal: React.FC<QCModalProps> = ({
               className="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-emerald-800 hover:bg-emerald-900 text-white text-xs sm:text-sm font-bold shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2"
             >
               <i className="fa-solid fa-check text-xs"></i>
-              <span>Simpan Hasil QC Ukur</span>
+              <span>Simpan QC</span>
             </button>
           </div>
 

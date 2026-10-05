@@ -95,9 +95,7 @@ export const SPKDetailModal: React.FC<SPKDetailModalProps> = ({
           {/* Status Tahapan Saat Ini */}
           <div className="p-3.5 bg-stone-50 rounded-2xl border border-stone-200 flex items-center justify-between">
             <div>
-              <span className="text-[10px] sm:text-xs text-stone-500 font-semibold uppercase tracking-wider block">
-                Tahap Produksi Saat Ini:
-              </span>
+              {/* Hilangkan Judul yang redundan */}
               <div className="flex items-center gap-2 mt-0.5">
                 <span className="text-sm sm:text-base font-extrabold text-brand-900">
                   Tahap {spk.current_stage}: {currentStageConfig?.name}
@@ -117,9 +115,7 @@ export const SPKDetailModal: React.FC<SPKDetailModalProps> = ({
             
             {/* Foto Motif Batik */}
             <div>
-              <span className="text-xs font-bold text-stone-700 mb-1.5 block">
-                Visual Motif Batik:
-              </span>
+              {/* Hilangkan label visual motif */}
               <div className="w-full h-44 rounded-2xl border border-stone-200 overflow-hidden bg-stone-100 flex items-center justify-center relative shadow-inner">
                 {spk.foto_motif_url ? (
                   <img 
@@ -141,29 +137,27 @@ export const SPKDetailModal: React.FC<SPKDetailModalProps> = ({
 
             {/* Rincian Spesifikasi */}
             <div className="space-y-2.5">
-              <span className="text-xs font-bold text-stone-700 block">
-                Spesifikasi Teknis:
-              </span>
+              {/* Hilangkan judul tabel teknis */}
               
               <div className="bg-white p-3 rounded-xl border border-stone-200 space-y-2">
                 <div className="flex justify-between items-center py-0.5 border-b border-stone-100">
-                  <span className="text-stone-500">Kain / Bahan:</span>
+                  <span className="text-stone-500">Bahan:</span>
                   <span className="font-semibold text-stone-900">{spk.bahan}</span>
                 </div>
                 <div className="flex justify-between items-center py-0.5 border-b border-stone-100">
-                  <span className="text-stone-500">Jenis Obat / Warna:</span>
+                  <span className="text-stone-500">Obat / Warna:</span>
                   <span className="font-semibold text-stone-900">{spk.obat} ({spk.jumlah_warna} Warna)</span>
                 </div>
                 <div className="flex justify-between items-center py-0.5 border-b border-stone-100">
-                  <span className="text-stone-500">Target Panjang:</span>
+                  <span className="text-stone-500">Target:</span>
                   <span className="font-extrabold text-brand-900">{spk.jumlah_meter} Meter</span>
                 </div>
                 <div className="flex justify-between items-center py-0.5 border-b border-stone-100">
-                  <span className="text-stone-500">Tgl Masuk SPK:</span>
+                  <span className="text-stone-500">Masuk:</span>
                   <span className="font-medium text-stone-800">{formatDate(spk.tanggal_masuk)}</span>
                 </div>
                 <div className="flex justify-between items-center py-0.5">
-                  <span className="text-stone-500">Deadline Target:</span>
+                  <span className="text-stone-500">Selesai:</span>
                   <span className={`font-bold ${isUrgent ? 'text-red-600' : 'text-stone-800'}`}>
                     {formatDate(spk.deadline)}
                   </span>
@@ -241,7 +235,7 @@ export const SPKDetailModal: React.FC<SPKDetailModalProps> = ({
                 className="w-full py-3.5 px-4 rounded-2xl bg-emerald-700 hover:bg-emerald-800 active:scale-[0.98] text-white text-xs font-bold shadow-md flex items-center justify-center gap-2 transition-all"
               >
                 <i className="fa-solid fa-ruler-combined text-emerald-200 text-sm"></i>
-                <span>Input QC Ukur Panjang Kain</span>
+                <span>Input QC Ukur</span>
                 <i className="fa-solid fa-arrow-right text-emerald-200 text-xs ml-1"></i>
               </button>
             )}

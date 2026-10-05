@@ -105,7 +105,7 @@ export const SPKModalForm: React.FC<SPKModalFormProps> = ({
             <div className="flex items-center gap-2">
               <i className="fa-solid fa-file-circle-plus text-gold-300 text-base"></i>
               <h2 className="text-base sm:text-lg font-bold tracking-tight">
-                Buat Surat Perintah Kerja (SPK)
+                Buat SPK Baru
               </h2>
             </div>
             <p className="text-xs text-brand-200 mt-0.5">
@@ -127,12 +127,12 @@ export const SPKModalForm: React.FC<SPKModalFormProps> = ({
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
             <div>
               <label className="block text-xs font-semibold text-stone-700 mb-1">
-                Nama Motif / Desain Batik <span className="text-red-500">*</span>
+                Motif / Desain <span className="text-red-500">*</span>
               </label>
               <input
                 type="text"
                 required
-                placeholder="Contoh: Parang Seling Kembang"
+                placeholder="Misal: Parang Seling Kembang"
                 value={namaProduksi}
                 onChange={(e) => setNamaProduksi(e.target.value)}
                 className="w-full px-3.5 py-2.5 rounded-xl border border-stone-300 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-brand-800/40"
@@ -141,12 +141,12 @@ export const SPKModalForm: React.FC<SPKModalFormProps> = ({
 
             <div>
               <label className="block text-xs font-semibold text-stone-700 mb-1">
-                Nama Pemesan / Pelanggan <span className="text-red-500">*</span>
+                Nama Pemesan <span className="text-red-500">*</span>
               </label>
               <input
                 type="text"
                 required
-                placeholder="Contoh: Bu Hj. Rahmawati"
+                placeholder="Misal: Bu Hj. Rahmawati"
                 value={namaPemesan}
                 onChange={(e) => setNamaPemesan(e.target.value)}
                 className="w-full px-3.5 py-2.5 rounded-xl border border-stone-300 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-brand-800/40"
@@ -253,7 +253,7 @@ export const SPKModalForm: React.FC<SPKModalFormProps> = ({
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
             <div>
               <label className="block text-xs font-semibold text-stone-700 mb-1">
-                Tanggal Masuk SPK
+                Tanggal Masuk
               </label>
               <input
                 type="date"
@@ -266,7 +266,7 @@ export const SPKModalForm: React.FC<SPKModalFormProps> = ({
 
             <div>
               <label className="block text-xs font-semibold text-stone-700 mb-1">
-                Target Deadline Selesai
+                Target Selesai
               </label>
               <input
                 type="date"
@@ -281,7 +281,7 @@ export const SPKModalForm: React.FC<SPKModalFormProps> = ({
           {/* Baris 5: Upload Foto Motif Batik */}
           <div>
             <label className="block text-xs font-semibold text-stone-700 mb-1">
-              Visual / Gambar Motif Batik
+              Gambar Motif
             </label>
             <div className="flex items-center gap-3">
               <div className="w-16 h-16 rounded-xl border border-stone-200 overflow-hidden bg-stone-100 flex items-center justify-center shrink-0 shadow-inner">
@@ -299,8 +299,8 @@ export const SPKModalForm: React.FC<SPKModalFormProps> = ({
                   className="hidden"
                 />
                 <i className="fa-solid fa-cloud-arrow-up text-brand-800 text-base mb-1 block"></i>
-                <span className="text-xs font-semibold text-brand-900 block">Pilih Gambar Motif dari Galeri / File</span>
-                <span className="text-[10px] text-stone-400">JPG, PNG, atau WebP</span>
+                <span className="text-xs font-semibold text-brand-900 block">Pilih Gambar</span>
+                <span className="text-[10px] text-stone-400">JPG, PNG, WebP</span>
               </label>
             </div>
           </div>
@@ -316,7 +316,7 @@ export const SPKModalForm: React.FC<SPKModalFormProps> = ({
               />
               <span className="text-xs font-bold text-stone-800 flex items-center gap-1.5">
                 <i className="fa-solid fa-fire-flame-curved text-amber-600 text-xs"></i>
-                Tandai Sebagai Proyek Mendesak (Urgent)
+                Tandai Mendesak
               </span>
             </label>
 
@@ -339,11 +339,11 @@ export const SPKModalForm: React.FC<SPKModalFormProps> = ({
           {/* Baris 7: Catatan Khusus */}
           <div>
             <label className="block text-xs font-semibold text-stone-700 mb-1">
-              Catatan / Instruksi Khusus (Opsional)
+              Catatan (Opsional)
             </label>
             <textarea
               rows={2}
-              placeholder="Contoh: Warna merah dibuat lebih pekat sesuai sampel kain sebelumnya..."
+              placeholder="Misal: Warna merah lebih pekat..."
               value={keterangan}
               onChange={(e) => setKeterangan(e.target.value)}
               className="w-full px-3.5 py-2 rounded-xl border border-stone-300 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-brand-800/40"
@@ -364,7 +364,7 @@ export const SPKModalForm: React.FC<SPKModalFormProps> = ({
               className="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-gradient-to-r from-brand-900 to-brand-800 hover:from-black hover:to-brand-900 text-white text-xs sm:text-sm font-bold shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 border border-gold-300/40"
             >
               <i className="fa-solid fa-check text-gold-300 text-xs"></i>
-              <span>Terbitkan & Simpan SPK</span>
+              <span>Simpan SPK</span>
             </button>
           </div>
 

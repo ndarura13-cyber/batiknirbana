@@ -77,7 +77,7 @@ export const DashboardSummary: React.FC<DashboardSummaryProps> = ({
               <span className={`hidden sm:inline text-xs font-semibold truncate ${
                 selectedFilter === 'active' ? 'text-brand-100' : 'text-stone-600'
               }`}>
-                Active SPK
+                Aktif
               </span>
             </div>
           </button>
@@ -139,7 +139,7 @@ export const DashboardSummary: React.FC<DashboardSummaryProps> = ({
               <span className={`hidden sm:inline text-xs font-semibold truncate ${
                 selectedFilter === 'in_progress' ? 'text-blue-100' : 'text-stone-600'
               }`}>
-                Proses Pabrik
+                Diproses
               </span>
             </div>
           </button>
@@ -200,7 +200,7 @@ export const DashboardSummary: React.FC<DashboardSummaryProps> = ({
         >
           <div className="flex items-center justify-between text-brand-200 mb-1">
             <span className="text-[11px] sm:text-xs font-semibold tracking-wider uppercase">
-              Active SPK
+              Aktif
             </span>
             <i className="fa-solid fa-industry text-sm opacity-80"></i>
           </div>
@@ -227,7 +227,7 @@ export const DashboardSummary: React.FC<DashboardSummaryProps> = ({
         >
           <div className="flex items-center justify-between opacity-90 mb-1">
             <span className="text-[11px] sm:text-xs font-semibold tracking-wider uppercase">
-              Mendesak / Urgent
+              Mendesak
             </span>
             <i className="fa-solid fa-fire-flame-curved text-sm text-amber-200 animate-pulse"></i>
           </div>
@@ -251,7 +251,7 @@ export const DashboardSummary: React.FC<DashboardSummaryProps> = ({
         >
           <div className="flex items-center justify-between text-stone-500 mb-1">
             <span className="text-[11px] sm:text-xs font-semibold tracking-wider uppercase">
-              Proses Pabrik
+              Diproses
             </span>
             <i className="fa-solid fa-gears text-sm text-blue-600"></i>
           </div>

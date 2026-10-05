@@ -106,10 +106,11 @@ export const SPKCard: React.FC<SPKCardProps> = ({
             </div>
 
             {/* Nama Produksi & Pemesan */}
-            <h3 className="text-sm sm:text-base font-bold text-stone-900 leading-snug">
-              {spk.nama_produksi}
-              <span className="text-stone-500 font-normal ml-1.5 text-xs sm:text-sm">
-                ({spk.nama_pemesan})
+            <h3 className="text-sm sm:text-base font-bold text-stone-900 leading-snug flex items-center flex-wrap gap-1.5 mt-1">
+              <span>{spk.nama_produksi}</span>
+              <span className="inline-flex items-center gap-1 text-stone-500 font-normal text-[11px] sm:text-xs bg-stone-100 px-2 py-0.5 rounded-md border border-stone-200/50">
+                <i className="fa-regular fa-user text-[10px]"></i>
+                {spk.nama_pemesan}
               </span>
             </h3>
           </div>
@@ -152,24 +153,23 @@ export const SPKCard: React.FC<SPKCardProps> = ({
 
         {/* Informasi Spesifikasi (Desktop View) */}
         <div className="hidden sm:flex flex-wrap items-center gap-y-1.5 gap-x-4 text-xs text-stone-600 bg-stone-50/70 p-2.5 rounded-xl border border-stone-100 mt-2">
-          <div>
-            <span className="text-stone-400">Bahan:</span>{' '}
+          <div className="flex items-center gap-1.5" title="Bahan dan Obat">
+            <i className="fa-solid fa-scroll text-stone-400"></i>
             <span className="font-semibold text-stone-800">{spk.bahan} ({spk.obat})</span>
           </div>
           <div className="h-3 w-px bg-stone-300" />
-          <div>
-            <span className="text-stone-400">Target SPK:</span>{' '}
-            <span className="font-semibold text-stone-800">{spk.jumlah_meter} Meter</span>
+          <div className="flex items-center gap-1.5" title="Target Panjang">
+            <i className="fa-solid fa-ruler-horizontal text-stone-400"></i>
+            <span className="font-semibold text-stone-800">{spk.jumlah_meter}m</span>
           </div>
           <div className="h-3 w-px bg-stone-300" />
-          <div>
-            <span className="text-stone-400">Warna:</span>{' '}
+          <div className="flex items-center gap-1.5" title="Jumlah Warna">
+            <i className="fa-solid fa-palette text-stone-400"></i>
             <span className="font-semibold text-stone-800">{spk.jumlah_warna} Warna</span>
           </div>
           <div className="h-3 w-px bg-stone-300" />
-          <div className="flex items-center gap-1.5">
+          <div className="flex items-center gap-1.5" title="Target Selesai">
             <i className="fa-regular fa-calendar text-stone-400 text-xs"></i>
-            <span className="text-stone-400">Target:</span>{' '}
             <span className={`font-semibold ${isUrgent ? 'text-red-600 font-bold' : 'text-stone-800'}`}>
               {formatDate(spk.deadline)}
             </span>
@@ -287,7 +287,7 @@ export const SPKCard: React.FC<SPKCardProps> = ({
             title="Cetak SPK atau simpan PDF 1 Halaman"
           >
             <i className="fa-solid fa-print text-stone-600 text-xs"></i>
-            <span className="hidden sm:inline">Cetak SPK</span>
+            <span className="hidden sm:inline">Cetak</span>
           </button>
 
           {/* Tombol Aksi Lanjut Tahap / Input QC */}

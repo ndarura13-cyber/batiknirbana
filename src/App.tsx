@@ -463,10 +463,10 @@ export const App: React.FC = () => {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4 sm:mb-5">
           <div className="flex items-center gap-2.5 flex-wrap">
             <h2 className="text-base sm:text-xl font-bold text-stone-900 tracking-tight">
-              Daftar Progres Produksi
+              Progres Produksi
             </h2>
             <span className="text-[11px] sm:text-xs font-semibold px-2.5 py-0.5 rounded-full bg-stone-200 text-stone-800">
-              {filteredSPK.length} SPK
+              {filteredSPK.length}
             </span>
             <button
               onClick={() => loadData(false)}
@@ -502,7 +502,7 @@ export const App: React.FC = () => {
             <div className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center group-hover:scale-110 transition-transform">
               <i className="fa-solid fa-plus text-gold-300 text-xs"></i>
             </div>
-            <span className="tracking-wide">Buat Surat Perintah Kerja (SPK) Baru</span>
+            <span className="tracking-wide">Buat Baru</span>
           </button>
         </div>
 
@@ -526,7 +526,7 @@ export const App: React.FC = () => {
               className="mt-4 inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-brand-800 hover:bg-brand-900 text-white text-xs font-semibold shadow-sm"
             >
               <i className="fa-solid fa-plus text-gold-300 text-xs"></i>
-              <span>Buat SPK Baru Sekarang</span>
+              <span>Buat Baru</span>
             </button>
           </div>
         ) : (
@@ -554,7 +554,7 @@ export const App: React.FC = () => {
 
             {/* Info Jumlah & Dropdown Per Halaman */}
             <div className="flex items-center gap-2 text-xs text-stone-600">
-              <span>Menampilkan {startIndex + 1}–{Math.min(startIndex + itemsPerPage, filteredSPK.length)} dari {filteredSPK.length} SPK</span>
+              <span>{startIndex + 1}–{Math.min(startIndex + itemsPerPage, filteredSPK.length)} dari {filteredSPK.length}</span>
               <span className="text-stone-300 hidden sm:inline">•</span>
               <div className="hidden sm:flex items-center gap-1.5">
                 <span className="text-stone-400">Tampilkan:</span>
@@ -563,9 +563,9 @@ export const App: React.FC = () => {
                   onChange={(e) => setItemsPerPage(Number(e.target.value))}
                   className="bg-stone-50 border border-stone-200 rounded-lg px-2 py-1 text-xs font-semibold text-stone-800 focus:outline-none"
                 >
-                  <option value={5}>5 SPK</option>
-                  <option value={10}>10 SPK</option>
-                  <option value={20}>20 SPK</option>
+                  <option value={5}>5</option>
+                  <option value={10}>10</option>
+                  <option value={20}>20</option>
                 </select>
               </div>
             </div>
@@ -633,7 +633,7 @@ export const App: React.FC = () => {
         <div className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center">
           <i className="fa-solid fa-plus text-gold-300 text-xs"></i>
         </div>
-        <span>Buat SPK Baru</span>
+        <span>Buat Baru</span>
       </button>
 
       {/* Floating Bottom Navigation Dock Khusus Mobile */}
