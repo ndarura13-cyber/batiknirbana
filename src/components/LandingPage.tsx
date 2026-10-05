@@ -74,11 +74,27 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [isWaOpen, setIsWaOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState('beranda');
   const heroRef = useRef<HTMLElement>(null);
 
-  // Sticky navbar scroll detection
+  // Sticky navbar & Scroll spy detection
   useEffect(() => {
-    const handler = () => setIsScrolled(window.scrollY > 60);
+    const handler = () => {
+      setIsScrolled(window.scrollY > 60);
+
+      // Scroll spy logic
+      const sections = NAV_LINKS.map(link => link.href.substring(1));
+      let current = '';
+      for (const section of sections) {
+        const element = document.getElementById(section);
+        if (element && window.scrollY >= (element.offsetTop - 150)) {
+          current = section;
+        }
+      }
+      if (current) {
+        setActiveSection(current);
+      }
+    };
     window.addEventListener('scroll', handler, { passive: true });
     return () => window.removeEventListener('scroll', handler);
   }, []);
@@ -139,10 +155,11 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
                 <button
                   key={link.href}
                   onClick={() => scrollTo(link.href)}
-                  className={`px-3.5 py-2 rounded-lg text-sm font-semibold transition-colors ${isScrolled
-                    ? 'text-stone-700 hover:text-brand-800 hover:bg-brand-50'
-                    : 'text-white/90 hover:text-white hover:bg-white/10'
-                    }`}
+                  className={`px-3.5 py-2 rounded-lg text-sm font-semibold transition-colors ${
+                    activeSection === link.href.substring(1)
+                      ? (isScrolled ? 'text-brand-800 bg-brand-50' : 'text-white bg-white/20')
+                      : (isScrolled ? 'text-stone-700 hover:text-brand-800 hover:bg-brand-50' : 'text-white/90 hover:text-white hover:bg-white/10')
+                  }`}
                 >
                   {link.label}
                 </button>
@@ -181,7 +198,11 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
                 <button
                   key={link.href}
                   onClick={() => scrollTo(link.href)}
-                  className="text-left px-4 py-3 rounded-xl text-stone-800 font-semibold hover:bg-brand-50 hover:text-brand-800 transition-colors text-sm"
+                  className={`text-left px-4 py-3 rounded-xl font-semibold transition-colors text-sm ${
+                    activeSection === link.href.substring(1)
+                      ? 'bg-brand-50 text-brand-800'
+                      : 'text-stone-800 hover:bg-brand-50 hover:text-brand-800'
+                  }`}
                 >
                   {link.label}
                 </button>
@@ -277,7 +298,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
           <div className="max-w-4xl mx-auto px-4 py-4 grid grid-cols-3 divide-x divide-white/10">
             {[
               { num: '10+', label: 'Tahun Pengalaman' },
-              { num: '1000+', label: 'Pelanggan Puas' },
+              { num: '999+', label: 'Pelanggan Puas' },
               { num: '3', label: 'Pabrik Produksi' },
             ].map((stat) => (
               <div key={stat.label} className="text-center px-4">
@@ -310,18 +331,18 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
           </div>
 
           {/* Feature Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5">
             {FEATURES.map((feat, i) => (
               <div
                 key={feat.title}
-                className="group p-6 rounded-2xl bg-white border border-stone-200 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300"
+                className="group p-4 sm:p-6 rounded-2xl bg-white border border-stone-200 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300"
                 style={{ animationDelay: `${i * 100}ms` }}
               >
-                <div className="w-12 h-12 rounded-xl bg-brand-50 border border-brand-100 flex items-center justify-center mb-4 group-hover:bg-brand-800 group-hover:border-brand-800 transition-colors">
-                  <i className={`fa-solid ${feat.icon} text-brand-700 group-hover:text-gold-300 text-lg transition-colors`}></i>
+                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-brand-50 border border-brand-100 flex items-center justify-center mb-3 sm:mb-4 group-hover:bg-brand-800 group-hover:border-brand-800 transition-colors">
+                  <i className={`fa-solid ${feat.icon} text-brand-700 group-hover:text-gold-300 text-base sm:text-lg transition-colors`}></i>
                 </div>
-                <h3 className="font-bold text-stone-900 text-sm mb-2">{feat.title}</h3>
-                <p className="text-stone-500 text-xs leading-relaxed">{feat.desc}</p>
+                <h3 className="font-bold text-stone-900 text-xs sm:text-sm mb-1.5 sm:mb-2 leading-tight">{feat.title}</h3>
+                <p className="text-stone-500 text-[10px] sm:text-xs leading-relaxed">{feat.desc}</p>
               </div>
             ))}
           </div>

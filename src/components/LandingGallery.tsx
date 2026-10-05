@@ -17,6 +17,8 @@ export const LandingGallery: React.FC = () => {
   const [items, setItems] = useState<GalleryItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [lightboxItem, setLightboxItem] = useState<GalleryItem | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 9;
 
   useEffect(() => {
     const fetchGallery = async () => {
@@ -27,7 +29,7 @@ export const LandingGallery: React.FC = () => {
           .not('foto_motif_url', 'is', null)
           .neq('foto_motif_url', '')
           .order('created_at', { ascending: false })
-          .limit(20);
+          .limit(90);
 
         if (!error && data) {
           setItems(data as GalleryItem[]);
@@ -55,8 +57,8 @@ export const LandingGallery: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
-        {Array.from({ length: 8 }).map((_, i) => <SkeletonCard key={i} />)}
+      <div className="grid grid-cols-3 gap-2 sm:gap-4">
+        {Array.from({ length: 9 }).map((_, i) => <SkeletonCard key={i} />)}
       </div>
     );
   }
@@ -71,11 +73,14 @@ export const LandingGallery: React.FC = () => {
     );
   }
 
+  const totalPages = Math.ceil(items.length / itemsPerPage);
+  const currentItems = items.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
   return (
     <>
       {/* Gallery Grid */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
-        {items.map((item, idx) => (
+      <div className="grid grid-cols-3 gap-2 sm:gap-4">
+        {currentItems.map((item, idx) => (
           <button
             key={item.id}
             onClick={() => setLightboxItem(item)}
@@ -92,10 +97,10 @@ export const LandingGallery: React.FC = () => {
             {/* Overlay on hover */}
             <div className="absolute inset-0 bg-gradient-to-t from-brand-950/90 via-brand-900/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-3">
               <div>
-                <p className="text-white font-bold text-xs sm:text-sm leading-tight line-clamp-2">
+                <p className="text-white font-bold text-[10px] sm:text-sm leading-tight line-clamp-2">
                   {item.nama_produksi}
                 </p>
-                <p className="text-gold-300 text-[10px] sm:text-xs mt-0.5 flex items-center gap-1">
+                <p className="text-gold-300 text-[9px] sm:text-xs mt-0.5 flex items-center gap-1">
                   <i className="fa-solid fa-magnifying-glass-plus text-[9px]"></i>
                   Perbesar
                 </p>
@@ -104,11 +109,40 @@ export const LandingGallery: React.FC = () => {
 
             {/* Always visible bottom label on mobile */}
             <div className="absolute bottom-0 left-0 right-0 px-2 py-1.5 bg-gradient-to-t from-black/70 to-transparent sm:hidden">
-              <p className="text-white text-[10px] font-semibold truncate">{item.nama_produksi}</p>
+              <p className="text-white text-[9px] font-semibold truncate">{item.nama_produksi}</p>
             </div>
           </button>
         ))}
       </div>
+
+      {/* Pagination Controls */}
+      {totalPages > 1 && (
+        <div className="flex items-center justify-center gap-4 mt-10">
+          <button
+            onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+            disabled={currentPage === 1}
+            className="w-10 h-10 rounded-xl bg-white border border-stone-200 text-stone-600 hover:bg-stone-50 hover:text-brand-800 disabled:opacity-50 disabled:pointer-events-none transition-all flex items-center justify-center shadow-sm"
+          >
+            <i className="fa-solid fa-chevron-left text-sm"></i>
+          </button>
+          
+          <div className="flex items-center gap-2 text-sm font-semibold text-stone-700">
+            <span className="w-8 h-8 rounded-lg bg-brand-50 text-brand-800 flex items-center justify-center">
+              {currentPage}
+            </span>
+            <span className="text-stone-400">/</span>
+            <span>{totalPages}</span>
+          </div>
+
+          <button
+            onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+            disabled={currentPage === totalPages}
+            className="w-10 h-10 rounded-xl bg-white border border-stone-200 text-stone-600 hover:bg-stone-50 hover:text-brand-800 disabled:opacity-50 disabled:pointer-events-none transition-all flex items-center justify-center shadow-sm"
+          >
+            <i className="fa-solid fa-chevron-right text-sm"></i>
+          </button>
+        </div>
+      )}
 
       {/* Lightbox */}
       {lightboxItem && (
