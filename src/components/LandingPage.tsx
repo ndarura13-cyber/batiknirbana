@@ -92,8 +92,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
     }
   };
 
-  const WA_ADMIN1 = 'https://wa.me/6282311016332';
-  const WA_ADMIN2 = 'https://wa.me/6285100969475';
+  const WA_ADMIN1 = 'https://wa.me/+6282311016332';
+  const WA_ADMIN2 = 'https://wa.me/+6285100969475';
 
   return (
     <div className="min-h-screen bg-white font-sans overflow-x-hidden" id="beranda">
@@ -102,11 +102,10 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
           NAVBAR
       ═══════════════════════════════════════════════ */}
       <header
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          isScrolled
-            ? 'bg-white/95 backdrop-blur-md shadow-sm border-b border-stone-100'
-            : 'bg-transparent'
-        }`}
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled
+          ? 'bg-white/95 backdrop-blur-md shadow-sm border-b border-stone-100'
+          : 'bg-transparent'
+          }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16 sm:h-20">
@@ -140,11 +139,10 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
                 <button
                   key={link.href}
                   onClick={() => scrollTo(link.href)}
-                  className={`px-3.5 py-2 rounded-lg text-sm font-semibold transition-colors ${
-                    isScrolled
-                      ? 'text-stone-700 hover:text-brand-800 hover:bg-brand-50'
-                      : 'text-white/90 hover:text-white hover:bg-white/10'
-                  }`}
+                  className={`px-3.5 py-2 rounded-lg text-sm font-semibold transition-colors ${isScrolled
+                    ? 'text-stone-700 hover:text-brand-800 hover:bg-brand-50'
+                    : 'text-white/90 hover:text-white hover:bg-white/10'
+                    }`}
                 >
                   {link.label}
                 </button>
@@ -164,9 +162,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
               {/* Mobile hamburger */}
               <button
                 onClick={() => setMobileNavOpen(!mobileNavOpen)}
-                className={`lg:hidden p-2 rounded-xl transition-colors ${
-                  isScrolled ? 'text-stone-700 hover:bg-stone-100' : 'text-white hover:bg-white/10'
-                }`}
+                className={`lg:hidden p-2 rounded-xl transition-colors ${isScrolled ? 'text-stone-700 hover:bg-stone-100' : 'text-white hover:bg-white/10'
+                  }`}
                 aria-label="Buka menu navigasi"
                 aria-expanded={mobileNavOpen}
               >
@@ -229,7 +226,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
 
         {/* Hero Content */}
         <div className="relative z-10 text-center px-4 sm:px-8 max-w-4xl mx-auto pt-20">
-          
+
           {/* Badge */}
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gold-400/20 border border-gold-300/40 text-gold-300 text-xs font-semibold mb-6 backdrop-blur-sm">
             <i className="fa-solid fa-star text-[10px]"></i>
@@ -245,7 +242,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
 
           <p className="text-stone-200 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed mb-10">
             Kami berkecimpung dalam industri tekstil, khususnya pembuatan batik dengan teknik{' '}
-            <strong className="text-white">printing berkualitas tinggi</strong>. 
+            <strong className="text-white">printing berkualitas tinggi</strong>.
             Lebih dari seribu pelanggan telah mempercayakan kebutuhan batik mereka kepada kami.
           </p>
 
@@ -307,7 +304,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
               <span className="text-brand-700">Bersama Nirbana Batik</span>
             </h2>
             <p className="mt-4 text-stone-600 max-w-xl mx-auto text-sm sm:text-base leading-relaxed">
-              Jika Anda membutuhkan seragam batik untuk instansi atau komunitas, kami siap 
+              Jika Anda membutuhkan seragam batik untuk instansi atau komunitas, kami siap
               membantu mewujudkan segala angan-angan Anda dalam pakaian yang nyaman dan elegan.
             </p>
           </div>
@@ -345,19 +342,10 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
                 Portofolio Motif Batik
               </h2>
               <p className="mt-3 text-stone-500 text-sm max-w-lg leading-relaxed">
-                Kumpulan motif batik yang telah kami produksi. Setiap karya mencerminkan keahlian, 
+                Kumpulan motif batik yang telah kami produksi. Setiap karya mencerminkan keahlian,
                 ketelitian, dan keindahan warisan batik Indonesia.
               </p>
             </div>
-            <a
-              href={WA_ADMIN1}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="shrink-0 flex items-center gap-2 px-5 py-2.5 rounded-xl bg-brand-800 hover:bg-brand-900 text-white font-bold text-sm active:scale-95 transition-all shadow-md"
-            >
-              <i className="fa-brands fa-whatsapp text-green-300"></i>
-              Pesan Motif Ini
-            </a>
           </div>
 
           {/* Dynamic Gallery Component */}
@@ -410,41 +398,20 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
               </h2>
               <div className="space-y-4 text-stone-300 text-sm sm:text-base leading-relaxed">
                 <p>
-                  Industri batik kami adalah jenis <strong className="text-white">batik printing</strong> — cetak sablon 
-                  berkualitas. Kami melayani jasa pembuatan batik dalam bentuk kain utuh, potongan, 
+                  Industri batik kami adalah jenis <strong className="text-white">batik printing</strong> — cetak sablon
+                  berkualitas. Kami melayani jasa pembuatan batik dalam bentuk kain utuh, potongan,
                   maupun baju jadi.
                 </p>
                 <p>
-                  Kami ada sejak <strong className="text-white">tahun 2013 di Surakarta</strong> dan masih berjalan 
-                  hingga sekarang. Dengan pengalaman lebih dari 10 tahun, tentunya banyak pengalaman kami 
+                  Kami ada sejak <strong className="text-white">tahun 2013 di Surakarta</strong> dan masih berjalan
+                  hingga sekarang. Dengan pengalaman lebih dari 10 tahun, tentunya banyak pengalaman kami
                   di bidang ini.
                 </p>
                 <p>
-                  Kualitas yang kami tawarkan adalah kualitas terbaik — dari jenis kain, pemakaian obat, 
-                  hingga pengerjaan. Kami memiliki SDM yang sangat terampil: desainer motif, pekerja cetak, 
+                  Kualitas yang kami tawarkan adalah kualitas terbaik — dari jenis kain, pemakaian obat,
+                  hingga pengerjaan. Kami memiliki SDM yang sangat terampil: desainer motif, pekerja cetak,
                   penjahit profesional, tim QC, hingga bagian pengiriman.
                 </p>
-              </div>
-
-              <div className="mt-8 flex flex-col sm:flex-row gap-3">
-                <a
-                  href={WA_ADMIN1}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-green-600 hover:bg-green-500 text-white font-bold text-sm active:scale-95 transition-all"
-                >
-                  <i className="fa-brands fa-whatsapp text-base"></i>
-                  Konsultasi (Admin 1)
-                </a>
-                <a
-                  href={WA_ADMIN2}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold text-sm active:scale-95 transition-all"
-                >
-                  <i className="fa-brands fa-whatsapp text-green-400 text-base"></i>
-                  Pemesanan (Admin 2)
-                </a>
               </div>
             </div>
 
@@ -507,39 +474,6 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
             <p className="mt-3 text-stone-500 text-sm max-w-md mx-auto">
               Kunjungi kami di Ndalem Tjokrosukarnan, Surakarta, atau hubungi langsung via WhatsApp.
             </p>
-          </div>
-
-          {/* Contact Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-10 max-w-xl mx-auto">
-            <a
-              href={WA_ADMIN1}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group flex items-center gap-4 p-4 rounded-2xl bg-green-50 border border-green-200 hover:bg-green-100 hover:border-green-300 transition-all active:scale-[0.98]"
-            >
-              <div className="w-12 h-12 rounded-xl bg-green-600 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
-                <i className="fa-brands fa-whatsapp text-white text-xl"></i>
-              </div>
-              <div>
-                <p className="font-bold text-green-900 text-sm">Admin 1</p>
-                <p className="text-green-700 text-xs font-mono">+62 823-1101-6332</p>
-              </div>
-            </a>
-
-            <a
-              href={WA_ADMIN2}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group flex items-center gap-4 p-4 rounded-2xl bg-green-50 border border-green-200 hover:bg-green-100 hover:border-green-300 transition-all active:scale-[0.98]"
-            >
-              <div className="w-12 h-12 rounded-xl bg-green-600 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
-                <i className="fa-brands fa-whatsapp text-white text-xl"></i>
-              </div>
-              <div>
-                <p className="font-bold text-green-900 text-sm">Admin 2</p>
-                <p className="text-green-700 text-xs font-mono">+62 851-0096-9475</p>
-              </div>
-            </a>
           </div>
 
           {/* Google Maps */}
@@ -649,17 +583,16 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
             </a>
           </div>
         )}
-        
+
         {/* Float Button */}
         <button
           onClick={() => setIsWaOpen(!isWaOpen)}
-          className={`w-14 h-14 rounded-full shadow-lg hover:shadow-xl flex items-center justify-center text-white text-2xl active:scale-95 transition-all ${
-            isWaOpen ? 'bg-stone-800 hover:bg-stone-700' : 'bg-green-500 hover:bg-green-400'
-          }`}
+          className={`w-14 h-14 rounded-full shadow-lg hover:shadow-xl flex items-center justify-center text-white text-2xl active:scale-95 transition-all ${isWaOpen ? 'bg-stone-800 hover:bg-stone-700' : 'bg-green-500 hover:bg-green-400'
+            }`}
           aria-label="Tampilkan opsi Chat WhatsApp"
           title="Chat WhatsApp Admin Nirbana Batik"
         >
-          <i className={`fa-solid ${isWaOpen ? 'fa-xmark' : 'fa-whatsapp'}`}></i>
+          <i className={isWaOpen ? 'fa-solid fa-xmark' : 'fa-brands fa-whatsapp'}></i>
         </button>
       </div>
 
