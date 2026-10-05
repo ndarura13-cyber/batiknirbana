@@ -73,6 +73,7 @@ const FEATURES = [
 export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
+  const [isWaOpen, setIsWaOpen] = useState(false);
   const heroRef = useRef<HTMLElement>(null);
 
   // Sticky navbar scroll detection
@@ -157,7 +158,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
                 className="hidden sm:flex items-center gap-2 px-4 py-2 rounded-xl bg-brand-800 hover:bg-brand-900 text-white text-sm font-bold shadow-md hover:shadow-lg active:scale-95 transition-all"
               >
                 <i className="fa-solid fa-right-to-bracket text-xs"></i>
-                <span>Masuk ke Sistem SPK</span>
+                <span>Sistem SPK</span>
               </button>
 
               {/* Mobile hamburger */}
@@ -193,7 +194,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
                 className="mt-2 flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-brand-800 text-white font-bold text-sm active:scale-95 transition-all"
               >
                 <i className="fa-solid fa-right-to-bracket text-xs"></i>
-                Masuk ke Sistem SPK
+                Sistem SPK
               </button>
             </nav>
           </div>
@@ -232,7 +233,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
           {/* Badge */}
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gold-400/20 border border-gold-300/40 text-gold-300 text-xs font-semibold mb-6 backdrop-blur-sm">
             <i className="fa-solid fa-star text-[10px]"></i>
-            Beroperasi Sejak 2013 di Surakarta
+            Sejak 2013
             <i className="fa-solid fa-star text-[10px]"></i>
           </div>
 
@@ -254,7 +255,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
               className="w-full sm:w-auto flex items-center justify-center gap-2.5 px-8 py-3.5 rounded-2xl bg-gold-400 hover:bg-gold-300 text-brand-950 font-bold text-sm shadow-lg hover:shadow-xl active:scale-95 transition-all"
             >
               <i className="fa-solid fa-images text-sm"></i>
-              Lihat Portofolio Batik
+              Portofolio
             </button>
             <a
               href={WA_ADMIN1}
@@ -263,7 +264,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
               className="w-full sm:w-auto flex items-center justify-center gap-2.5 px-8 py-3.5 rounded-2xl bg-white/10 hover:bg-white/20 border border-white/30 text-white font-bold text-sm backdrop-blur-sm active:scale-95 transition-all"
             >
               <i className="fa-brands fa-whatsapp text-green-400 text-base"></i>
-              Hubungi via WhatsApp
+              Hubungi Kami
             </a>
           </div>
 
@@ -433,7 +434,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
                   className="flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-green-600 hover:bg-green-500 text-white font-bold text-sm active:scale-95 transition-all"
                 >
                   <i className="fa-brands fa-whatsapp text-base"></i>
-                  Admin 1 — Konsultasi
+                  Konsultasi (Admin 1)
                 </a>
                 <a
                   href={WA_ADMIN2}
@@ -442,7 +443,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
                   className="flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold text-sm active:scale-95 transition-all"
                 >
                   <i className="fa-brands fa-whatsapp text-green-400 text-base"></i>
-                  Admin 2 — Pemesanan
+                  Pemesanan (Admin 2)
                 </a>
               </div>
             </div>
@@ -458,9 +459,9 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
 
           <div className="text-center mb-14">
-            <p className="text-brand-700 text-xs font-bold tracking-[0.25em] uppercase mb-3">Kepercayaan Pelanggan</p>
+            <p className="text-brand-700 text-xs font-bold tracking-[0.25em] uppercase mb-3">Testimoni</p>
             <h2 className="font-serif text-3xl sm:text-4xl font-bold text-brand-950">
-              Kata Partner Kami
+              Kata Mereka
             </h2>
           </div>
 
@@ -501,7 +502,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
           <div className="text-center mb-12">
             <p className="text-brand-700 text-xs font-bold tracking-[0.25em] uppercase mb-3">Temukan Kami</p>
             <h2 className="font-serif text-3xl sm:text-4xl font-bold text-brand-950">
-              We Have the Right Place For You
+              Kunjungi Lokasi Kami
             </h2>
             <p className="mt-3 text-stone-500 text-sm max-w-md mx-auto">
               Kunjungi kami di Ndalem Tjokrosukarnan, Surakarta, atau hubungi langsung via WhatsApp.
@@ -606,23 +607,61 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
               className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 border border-white/10 text-stone-300 hover:text-white text-xs font-semibold transition-colors"
             >
               <i className="fa-solid fa-right-to-bracket text-xs"></i>
-              Masuk ke Sistem SPK
+              Sistem SPK
             </button>
           </div>
         </div>
       </footer>
 
-      {/* WhatsApp Float Button */}
-      <a
-        href={WA_ADMIN1}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full bg-green-500 hover:bg-green-400 shadow-lg hover:shadow-xl flex items-center justify-center text-white text-2xl active:scale-95 transition-all"
-        aria-label="Chat WhatsApp Admin"
-        title="Chat WhatsApp Admin Nirbana Batik"
-      >
-        <i className="fa-brands fa-whatsapp"></i>
-      </a>
+      {/* WhatsApp Float Button & Roll-Up Modal */}
+      <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-3">
+        {/* Roll-up Menu */}
+        {isWaOpen && (
+          <div className="bg-white rounded-2xl shadow-xl border border-stone-200 p-3 flex flex-col gap-2 w-48 animate-slideUp origin-bottom-right">
+            <div className="text-[10px] font-bold text-stone-500 uppercase tracking-wider mb-1 px-1">Pilih Admin</div>
+            <a
+              href={WA_ADMIN1}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-green-50 text-stone-800 transition-colors group border border-transparent hover:border-green-100"
+            >
+              <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center group-hover:bg-green-500 group-hover:text-white transition-colors text-green-600">
+                <i className="fa-brands fa-whatsapp text-sm"></i>
+              </div>
+              <div>
+                <div className="text-sm font-bold text-stone-800">Konsultasi</div>
+                <div className="text-[10px] font-semibold text-stone-500">Admin 1</div>
+              </div>
+            </a>
+            <a
+              href={WA_ADMIN2}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-green-50 text-stone-800 transition-colors group border border-transparent hover:border-green-100"
+            >
+              <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center group-hover:bg-green-500 group-hover:text-white transition-colors text-green-600">
+                <i className="fa-brands fa-whatsapp text-sm"></i>
+              </div>
+              <div>
+                <div className="text-sm font-bold text-stone-800">Pemesanan</div>
+                <div className="text-[10px] font-semibold text-stone-500">Admin 2</div>
+              </div>
+            </a>
+          </div>
+        )}
+        
+        {/* Float Button */}
+        <button
+          onClick={() => setIsWaOpen(!isWaOpen)}
+          className={`w-14 h-14 rounded-full shadow-lg hover:shadow-xl flex items-center justify-center text-white text-2xl active:scale-95 transition-all ${
+            isWaOpen ? 'bg-stone-800 hover:bg-stone-700' : 'bg-green-500 hover:bg-green-400'
+          }`}
+          aria-label="Tampilkan opsi Chat WhatsApp"
+          title="Chat WhatsApp Admin Nirbana Batik"
+        >
+          <i className={`fa-solid ${isWaOpen ? 'fa-xmark' : 'fa-whatsapp'}`}></i>
+        </button>
+      </div>
 
     </div>
   );
