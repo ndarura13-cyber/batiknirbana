@@ -192,12 +192,11 @@ export const SPKModalForm: React.FC<SPKModalFormProps> = ({
                 onChange={(e) => setBahan(e.target.value)}
                 className="w-full px-3 py-2.5 rounded-xl border border-stone-300 text-xs sm:text-sm bg-white focus:outline-none focus:ring-2 focus:ring-brand-800/40"
               >
-                <option value="Primis">Primis</option>
                 <option value="Prima">Prima</option>
+                <option value="Primis">Primis</option>
                 <option value="Dobby">Dobby</option>
-                <option value="Sutra">Sutra</option>
-                <option value="Rayon">Rayon</option>
-                <option value="Santung">Santung</option>
+                <option value="Sanwos">Sanwos</option>
+                <option value="Lainnya">Lainnya</option>
               </select>
             </div>
 
@@ -211,10 +210,8 @@ export const SPKModalForm: React.FC<SPKModalFormProps> = ({
                 className="w-full px-3 py-2.5 rounded-xl border border-stone-300 text-xs sm:text-sm bg-white focus:outline-none focus:ring-2 focus:ring-brand-800/40"
               >
                 <option value="Reaktif">Reaktif</option>
-                <option value="Indigosol">Indigosol</option>
-                <option value="Napthol">Napthol</option>
-                <option value="Pigmen">Pigmen</option>
-                <option value="Remasol">Remasol</option>
+                <option value="Disperse">Disperse</option>
+                <option value="Pigment">Pigment</option>
               </select>
             </div>
 
