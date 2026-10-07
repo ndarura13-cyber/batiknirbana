@@ -95,20 +95,6 @@ export const SPKPrintView: React.FC<SPKPrintViewProps> = ({
               </p>
             </div>
           </div>
-
-          {/* QR Code Pelacak Mandor / Pabrik */}
-          {qrCodeDataUrl && (
-            <div className="text-center pl-2 shrink-0">
-              <img
-                src={qrCodeDataUrl}
-                alt="QR Code Pelacak SPK"
-                className="w-14 h-14 sm:w-16 sm:h-16 border border-stone-300 rounded p-0.5 mx-auto"
-              />
-              <span className="block text-[8px] text-stone-600 font-mono mt-0.5 font-semibold">
-                Scan Lacak
-              </span>
-            </div>
-          )}
         </div>
 
         {/* Garis Tebal Pemisah Kop Surat */}
@@ -126,59 +112,74 @@ export const SPKPrintView: React.FC<SPKPrintViewProps> = ({
 
         {/* 3. TABEL SPESIFIKASI PEKERJAAN (1:1 Sesuai Layout SPK Asli) */}
         <div className="mt-1 border-t border-stone-400 pt-2 text-xs sm:text-sm">
+          <div className="flex justify-between items-start gap-2">
+            <div className="flex-1">
+              {/* Baris Nama Produksi (Pemesan) */}
+              <div className="flex items-center mb-1.5">
+                <span className="w-28 sm:w-32 font-semibold text-stone-900 shrink-0">Nama Produksi :</span>
+                <span className="font-bold underline text-stone-950 text-sm sm:text-base">
+                  {spk.nama_produksi} ({spk.nama_pemesan})
+                </span>
+              </div>
 
-          {/* Baris Nama Produksi (Pemesan) */}
-          <div className="flex items-center mb-1.5">
-            <span className="w-32 sm:w-36 font-semibold text-stone-900 shrink-0">Nama Produksi :</span>
-            <span className="font-bold underline text-stone-950 text-sm sm:text-base">
-              {spk.nama_produksi} ({spk.nama_pemesan})
-            </span>
-          </div>
+              {/* Tabel Dua Kolom Spesifikasi */}
+              <div className="border-t border-stone-200 pt-1.5 grid grid-cols-2 gap-y-1.5 gap-x-4">
+                {/* Kolom Kiri: Bahan */}
+                <div className="flex items-baseline">
+                  <span className="w-20 sm:w-24 font-semibold text-stone-800 shrink-0">Bahan</span>
+                  <span className="font-medium text-stone-950">: {spk.bahan}</span>
+                </div>
 
-          {/* Tabel Dua Kolom Spesifikasi */}
-          <div className="border-t border-stone-200 pt-1.5 grid grid-cols-2 gap-y-1.5 gap-x-4">
+                {/* Kolom Kanan: Obat */}
+                <div className="flex items-baseline">
+                  <span className="w-24 sm:w-28 font-semibold text-stone-800 shrink-0">Obat</span>
+                  <span className="font-medium text-stone-950">: {spk.obat}</span>
+                </div>
 
-            {/* Kolom Kiri: Bahan */}
-            <div className="flex items-baseline">
-              <span className="w-20 sm:w-24 font-semibold text-stone-800 shrink-0">Bahan</span>
-              <span className="font-medium text-stone-950">: {spk.bahan}</span>
+                {/* Kolom Kiri: Jumlah Target */}
+                <div className="flex items-baseline">
+                  <span className="w-20 sm:w-24 font-semibold text-stone-800 shrink-0">Jumlah</span>
+                  <span className="font-medium text-stone-950">: {spk.jumlah_meter} Meter</span>
+                </div>
+
+                {/* Kolom Kanan: Jumlah Warna */}
+                <div className="flex items-baseline">
+                  <span className="w-24 sm:w-28 font-semibold text-stone-800 shrink-0">Juml. Warna</span>
+                  <span className="font-medium text-stone-950">: {spk.jumlah_warna} Warna</span>
+                </div>
+
+                {/* Kolom Kiri: Pabrik Cetak */}
+                <div className="flex items-baseline">
+                  <span className="w-20 sm:w-24 font-semibold text-stone-800 shrink-0">Pabrik</span>
+                  <span className="font-bold text-stone-950">: {spk.pabrik}</span>
+                </div>
+
+                {/* Kolom Kanan: Tanggal Masuk */}
+                <div className="flex items-baseline">
+                  <span className="w-24 sm:w-28 font-semibold text-stone-800 shrink-0">Tanggal Masuk</span>
+                  <span className="font-medium text-stone-950">: {formatTanggalResmi(spk.tanggal_masuk)}</span>
+                </div>
+              </div>
             </div>
 
-            {/* Kolom Kanan: Obat */}
-            <div className="flex items-baseline">
-              <span className="w-24 sm:w-28 font-semibold text-stone-800 shrink-0">Obat</span>
-              <span className="font-medium text-stone-950">: {spk.obat}</span>
-            </div>
-
-            {/* Kolom Kiri: Jumlah Target */}
-            <div className="flex items-baseline">
-              <span className="w-20 sm:w-24 font-semibold text-stone-800 shrink-0">Jumlah</span>
-              <span className="font-medium text-stone-950">: {spk.jumlah_meter} Meter</span>
-            </div>
-
-            {/* Kolom Kanan: Jumlah Warna */}
-            <div className="flex items-baseline">
-              <span className="w-24 sm:w-28 font-semibold text-stone-800 shrink-0">Juml. Warna</span>
-              <span className="font-medium text-stone-950">: {spk.jumlah_warna} Warna</span>
-            </div>
-
-            {/* Kolom Kiri: Pabrik Cetak */}
-            <div className="flex items-baseline">
-              <span className="w-20 sm:w-24 font-semibold text-stone-800 shrink-0">Pabrik</span>
-              <span className="font-bold text-stone-950">: {spk.pabrik}</span>
-            </div>
-
-            {/* Kolom Kanan: Tanggal Masuk */}
-            <div className="flex items-baseline">
-              <span className="w-24 sm:w-28 font-semibold text-stone-800 shrink-0">Tanggal Masuk</span>
-              <span className="font-medium text-stone-950">: {formatTanggalResmi(spk.tanggal_masuk)}</span>
-            </div>
-
+            {/* Kolom Paling Kanan: Barcode */}
+            {qrCodeDataUrl && (
+              <div className="shrink-0 text-center ml-2">
+                <img
+                  src={qrCodeDataUrl}
+                  alt="QR Code Pelacak SPK"
+                  className="w-[68px] h-[68px] sm:w-[76px] sm:h-[76px] border border-stone-300 rounded p-0.5 mx-auto"
+                />
+                <span className="block text-[9px] text-stone-600 mt-0.5">
+                  Lacak
+                </span>
+              </div>
+            )}
           </div>
 
           {/* Baris Keterangan */}
           <div className="border-t border-b border-stone-300 py-1.5 mt-1.5 flex items-start">
-            <span className="w-20 sm:w-24 font-semibold text-stone-800 shrink-0">Keterangan :</span>
+            <span className="w-28 sm:w-32 font-semibold text-stone-800 shrink-0">Keterangan :</span>
             <span className="font-medium text-stone-900 leading-snug">
               {spk.keterangan || '-'}
             </span>
@@ -198,22 +199,7 @@ export const SPKPrintView: React.FC<SPKPrintViewProps> = ({
         </div>
 
         {/* 5. FOOTER RESMI DENGAN BARCODE DI SUDUT BAWAH DOKUMEN SPK */}
-        <div className="mt-2.5 pt-2 border-t border-black flex items-center justify-between text-black">
-          {/* Sudut Kiri Bawah: Barcode Pelacak */}
-          {qrCodeDataUrl && (
-            <div className="flex items-center gap-1.5 shrink-0">
-              <img
-                src={qrCodeDataUrl}
-                alt="QR Code Lacak SPK"
-                className="w-11 h-11 sm:w-12 sm:h-12 border border-stone-400 rounded p-0.5"
-              />
-              <div className="text-[8px] font-mono leading-tight text-stone-800">
-                <span className="font-bold block uppercase">Scan Lacak SPK</span>
-                <span className="text-[7.5px] text-stone-600">Batik Nirbana</span>
-              </div>
-            </div>
-          )}
-
+        <div className="mt-2.5 pt-2 border-t border-black flex items-center justify-center text-black">
           {/* Keterangan Tengah */}
           <div className="text-center text-[8.5px] text-stone-700 font-sans px-2">
             <span className="font-bold block text-stone-900 uppercase">
@@ -223,21 +209,6 @@ export const SPKPrintView: React.FC<SPKPrintViewProps> = ({
               Surakarta • Scan barcode di sudut untuk melihat progres & spesifikasi pengerjaan
             </span>
           </div>
-
-          {/* Sudut Kanan Bawah: Barcode Pelacak */}
-          {qrCodeDataUrl && (
-            <div className="flex items-center gap-1.5 shrink-0 text-right">
-              <div className="text-[8px] font-mono leading-tight text-stone-800">
-                <span className="font-bold block uppercase">Scan Lacak SPK</span>
-                <span className="text-[7.5px] text-stone-600 truncate max-w-[90px]">{spk.nomor_spk}</span>
-              </div>
-              <img
-                src={qrCodeDataUrl}
-                alt="QR Code Lacak SPK"
-                className="w-11 h-11 sm:w-12 sm:h-12 border border-stone-400 rounded p-0.5"
-              />
-            </div>
-          )}
         </div>
 
       </div>
