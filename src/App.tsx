@@ -316,7 +316,12 @@ export const App: React.FC = () => {
       const url = new URL(window.location.href);
       url.searchParams.delete('spk');
       url.searchParams.delete('preview');
-      window.history.pushState({}, '', url.pathname);
+      window.history.pushState({}, '', url.toString());
+      
+      const hasAppParam = url.searchParams.get('app') === '1';
+      if (!hasAppParam) {
+        setShowLanding(true);
+      }
     } catch {
       // ignore
     }
@@ -425,6 +430,7 @@ export const App: React.FC = () => {
         onOpenNewSPKModal={() => setIsNewSPKOpen(true)}
         onOpenDbModal={() => setIsDbModalOpen(true)}
         onRequestLogout={() => setIsLogoutConfirmOpen(true)}
+        onBackToLanding={handleBackToLanding}
         isDbConnected={isDbConnected}
       />
 

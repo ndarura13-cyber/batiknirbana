@@ -8,6 +8,7 @@ interface HeaderProps {
   onOpenNewSPKModal: () => void;
   onOpenDbModal: () => void;
   onRequestLogout: () => void;
+  onBackToLanding: () => void;
   isDbConnected: boolean;
 }
 
@@ -18,6 +19,7 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenNewSPKModal,
   onOpenDbModal,
   onRequestLogout,
+  onBackToLanding,
   isDbConnected,
 }) => {
   const getRoleBadge = () => {
@@ -44,7 +46,7 @@ export const Header: React.FC<HeaderProps> = ({
         <div className="flex items-center justify-between h-16 sm:h-20">
 
           {/* Logo & Identitas Brand (SELALU TERLIHAT JELAS DI MOBILE & DESKTOP) */}
-          <div className="flex items-center gap-2.5 sm:gap-3.5 min-w-0">
+          <button onClick={onBackToLanding} className="flex items-center gap-2.5 sm:gap-3.5 min-w-0 text-left hover:opacity-80 transition-opacity" title="Kembali ke Beranda">
             <div className="relative shrink-0">
               <img
                 src="/logo.png"
@@ -65,10 +67,19 @@ export const Header: React.FC<HeaderProps> = ({
                 <span className="hidden sm:inline"> • Surakarta</span>
               </p>
             </div>
-          </div>
+          </button>
 
           {/* Aksi Navigasi & Kontrol Header */}
           <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+
+            {/* Tombol Ke Beranda */}
+            <button
+              onClick={onBackToLanding}
+              className="hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold border bg-stone-50 border-stone-200 text-stone-700 hover:bg-stone-100 transition-all"
+            >
+              <i className="fa-solid fa-house text-stone-500 text-xs"></i>
+              <span>Beranda</span>
+            </button>
 
             {/* Status Koneksi SQL Cloud (Desktop & Tablet) */}
             <button
