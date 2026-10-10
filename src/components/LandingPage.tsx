@@ -313,25 +313,6 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
             </button>
           </form>
 
-          {/* Form Lacak SPK */}
-          <form onSubmit={handleTrackSubmit} className="mt-8 max-w-sm mx-auto relative flex items-center">
-            <input
-              type="text"
-              placeholder="Masukkan Nomor SPK untuk dilacak..."
-              value={trackInput}
-              onChange={(e) => setTrackInput(e.target.value)}
-              className="w-full pl-5 pr-12 py-3.5 rounded-2xl bg-white/10 border border-white/30 text-white placeholder:text-white/60 focus:outline-none focus:ring-2 focus:ring-gold-400 backdrop-blur-sm text-sm"
-              required
-            />
-            <button
-              type="submit"
-              className="absolute right-2 p-2.5 rounded-xl bg-gold-400 text-brand-950 hover:bg-gold-300 transition-colors shadow-sm"
-              title="Lacak SPK"
-            >
-              <i className="fa-solid fa-magnifying-glass text-sm"></i>
-            </button>
-          </form>
-
           {/* Scroll indicator */}
           <div className="mt-16 flex flex-col items-center gap-2 text-stone-400 animate-bounce">
             <span className="text-xs font-medium tracking-widest uppercase">Scroll</span>

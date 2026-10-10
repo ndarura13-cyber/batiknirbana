@@ -12,6 +12,7 @@ interface SPKDetailModalProps {
   isAdmin?: boolean;
   onRequestDelete?: (spk: SPKItem) => void;
   onOpenTracking?: (spk: SPKItem) => void;
+  onEditSPK?: (spk: SPKItem) => void;
 }
 
 export const SPKDetailModal: React.FC<SPKDetailModalProps> = ({
@@ -25,6 +26,7 @@ export const SPKDetailModal: React.FC<SPKDetailModalProps> = ({
   isAdmin,
   onRequestDelete,
   onOpenTracking,
+  onEditSPK,
 }) => {
   if (!isOpen || !spk) return null;
 
@@ -298,6 +300,22 @@ export const SPKDetailModal: React.FC<SPKDetailModalProps> = ({
                 >
                   <i className="fa-solid fa-qrcode text-brand-800 text-sm mb-1"></i>
                   <span className="text-[11px] font-semibold truncate w-full text-center">Lacak</span>
+                </button>
+              ) : null}
+
+              {/* Tombol Edit SPK (Khusus Admin) */}
+              {isAdmin && onEditSPK ? (
+                <button
+                  type="button"
+                  onClick={() => {
+                    onClose();
+                    onEditSPK(spk);
+                  }}
+                  className="flex flex-col items-center justify-center py-2.5 px-1 min-h-[52px] rounded-xl bg-blue-50 hover:bg-blue-100 border border-blue-200 text-blue-700 active:scale-95 transition-all shadow-2xs"
+                  title="Edit SPK"
+                >
+                  <i className="fa-solid fa-pen-to-square text-blue-600 text-sm mb-1"></i>
+                  <span className="text-[11px] font-bold truncate w-full text-center">Edit</span>
                 </button>
               ) : null}
 

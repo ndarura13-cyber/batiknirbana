@@ -163,6 +163,47 @@ export const apiSaveSPK = async (item: Omit<SPKItem, 'id'>): Promise<SPKItem | n
   }
 };
 
+export const apiUpdateSPK = async (id: string, item: Omit<SPKItem, 'id'>): Promise<boolean> => {
+  if (!supabase) return false;
+
+  try {
+    const payload = {
+      nama_produksi: item.nama_produksi,
+      nama_pemesan: item.nama_pemesan,
+      pabrik: item.pabrik,
+      bahan: item.bahan,
+      obat: item.obat,
+      jumlah_meter: item.jumlah_meter,
+      jumlah_warna: item.jumlah_warna,
+      tanggal_masuk: item.tanggal_masuk,
+      deadline: item.deadline,
+      keterangan: item.keterangan,
+      foto_motif_url: item.foto_motif_url,
+      current_stage: item.current_stage,
+      status_design: item.status_design,
+      is_urgent: item.is_urgent,
+      pic_terakhir: item.pic_terakhir,
+      qc_meter_riil: item.qc_meter_riil,
+      qc_catatan: item.qc_catatan,
+      qc_roll_details: item.qc_roll_details,
+    };
+
+    const { error } = await supabase
+      .from('spk')
+      .update(payload)
+      .eq('id', id);
+
+    if (error) {
+      console.error('Error update SPK:', error.message);
+      return false;
+    }
+    return true;
+  } catch (err) {
+    console.error('Exception update SPK:', err);
+    return false;
+  }
+};
+
 export const apiUpdateStage = async (
   id: string,
   stage: StageId,

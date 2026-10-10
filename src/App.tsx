@@ -6,6 +6,7 @@ import {
   apiUpdateStage,
   apiUpdateQC,
   apiDeleteSPK,
+  apiUpdateSPK,
   subscribeToSPKChanges,
   isSupabaseConfigured,
   cleanupLegacyLocalStorage
@@ -72,6 +73,7 @@ export const App: React.FC = () => {
 
   // Modals & Dialogs
   const [isNewSPKOpen, setIsNewSPKOpen] = useState(false);
+  const [spkToEdit, setSpkToEdit] = useState<SPKItem | null>(null);
   const [isRoleModalOpen, setIsRoleModalOpen] = useState(false);
   const [isDbModalOpen, setIsDbModalOpen] = useState(false);
   const [isLogoutConfirmOpen, setIsLogoutConfirmOpen] = useState(false);
@@ -214,13 +216,28 @@ export const App: React.FC = () => {
     setIsLogoutConfirmOpen(false);
   };
 
-  // Handler: Tambah SPK Baru
-  const handleCreateSPK = async (data: Omit<SPKItem, 'id'>) => {
-    const created = await apiSaveSPK(data);
-    if (created) {
-      setSpkList(prev => [created, ...prev]);
+  // Handler: Tambah SPK Baru atau Update SPK
+  const handleCreateOrUpdateSPK = async (data: Omit<SPKItem, 'id'>) => {
+    if (spkToEdit) {
+      // Logic for editing SPK - Note: if the backend only has apiSaveSPK, 
+      // we might need an apiUpdateSPK. For now, we will update the state directly 
+      // and assume we have an update function, or just update the object.
+      // Assuming apiUpdateSPK exists or we need to add it. Let's use apiUpdateStage as a reference.
+      // But actually, we don't have apiUpdateSPK in supabase.ts yet. We will add it.
+      const success = await apiUpdateSPK(spkToEdit.id, data);
+      if (success) {
+        setSpkList(prev => prev.map(item => item.id === spkToEdit.id ? { ...data, id: spkToEdit.id } : item));
+      } else {
+        loadData(false);
+      }
+      setSpkToEdit(null);
     } else {
-      loadData(false);
+      const created = await apiSaveSPK(data);
+      if (created) {
+        setSpkList(prev => [created, ...prev]);
+      } else {
+        loadData(false);
+      }
     }
   };
 
@@ -667,10 +684,14 @@ export const App: React.FC = () => {
 
       {/* Slide-Up Bottom Sheet Modals */}
       <SPKModalForm
-        isOpen={isNewSPKOpen}
-        onClose={() => setIsNewSPKOpen(false)}
-        onSubmit={handleCreateSPK}
+        isOpen={isNewSPKOpen || !!spkToEdit}
+        onClose={() => {
+          setIsNewSPKOpen(false);
+          setSpkToEdit(null);
+        }}
+        onSubmit={handleCreateOrUpdateSPK}
         existingCount={spkList.length}
+        initialData={spkToEdit || undefined}
       />
 
       <QCModal
@@ -691,6 +712,7 @@ export const App: React.FC = () => {
         isAdmin={currentRole === 'admin'}
         onRequestDelete={handleRequestDelete}
         onOpenTracking={handleOpenTrackingPreview}
+        onEditSPK={(spk) => setSpkToEdit(spk)}
       />
 
       <SPKPrintView

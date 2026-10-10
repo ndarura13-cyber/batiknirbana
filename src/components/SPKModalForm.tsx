@@ -6,6 +6,7 @@ interface SPKModalFormProps {
   onClose: () => void;
   onSubmit: (data: Omit<SPKItem, 'id'>) => void;
   existingCount: number;
+  initialData?: SPKItem;
 }
 
 export const SPKModalForm: React.FC<SPKModalFormProps> = ({
@@ -13,6 +14,7 @@ export const SPKModalForm: React.FC<SPKModalFormProps> = ({
   onClose,
   onSubmit,
   existingCount,
+  initialData,
 }) => {
   const today = new Date().toISOString().split('T')[0];
   const nextWeek = new Date(Date.now() + 6 * 24 * 3600 * 1000).toISOString().split('T')[0];
@@ -31,6 +33,38 @@ export const SPKModalForm: React.FC<SPKModalFormProps> = ({
   const [statusDesign, setStatusDesign] = useState<'Pending' | 'Approved'>('Pending');
   const [isUrgent, setIsUrgent] = useState(false);
 
+  React.useEffect(() => {
+    if (initialData && isOpen) {
+      setPabrik(initialData.pabrik);
+      setNamaProduksi(initialData.nama_produksi);
+      setNamaPemesan(initialData.nama_pemesan);
+      setBahan(initialData.bahan);
+      setObat(initialData.obat);
+      setJumlahMeter(initialData.jumlah_meter);
+      setJumlahWarna(initialData.jumlah_warna);
+      setTanggalMasuk(initialData.tanggal_masuk);
+      setDeadline(initialData.deadline);
+      setKeterangan(initialData.keterangan || '');
+      setFotoMotifUrl(initialData.foto_motif_url || '/batik_parang_kusuma.png');
+      setStatusDesign(initialData.status_design);
+      setIsUrgent(initialData.is_urgent || false);
+    } else if (isOpen && !initialData) {
+      setPabrik('Pasar Kembang');
+      setNamaProduksi('');
+      setNamaPemesan('');
+      setBahan('Primis');
+      setObat('Reaktif');
+      setJumlahMeter(200);
+      setJumlahWarna(3);
+      setTanggalMasuk(today);
+      setDeadline(nextWeek);
+      setKeterangan('');
+      setFotoMotifUrl('/batik_parang_kusuma.png');
+      setStatusDesign('Pending');
+      setIsUrgent(false);
+    }
+  }, [initialData, isOpen]);
+
   if (!isOpen) return null;
 
   const getPabrikCode = (p: Pabrik) => {
@@ -43,16 +77,43 @@ export const SPKModalForm: React.FC<SPKModalFormProps> = ({
 
   const ym = today.slice(2, 4) + today.slice(5, 7);
   const nomorUrut = String(existingCount + 1).padStart(3, '0');
-  const generatedNomorSPK = `SPK-${getPabrikCode(pabrik)}-${ym}-${nomorUrut}`;
+  const generatedNomorSPK = initialData ? initialData.nomor_spk : `SPK-${getPabrikCode(pabrik)}-${ym}-${nomorUrut}`;
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       const reader = new FileReader();
-      reader.onloadend = () => {
-        if (typeof reader.result === 'string') {
-          setFotoMotifUrl(reader.result);
-        }
+      reader.onload = (event) => {
+        const img = new Image();
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          const MAX_WIDTH = 800;
+          const MAX_HEIGHT = 800;
+          let width = img.width;
+          let height = img.height;
+
+          if (width > height) {
+            if (width > MAX_WIDTH) {
+              height *= MAX_WIDTH / width;
+              width = MAX_WIDTH;
+            }
+          } else {
+            if (height > MAX_HEIGHT) {
+              width *= MAX_HEIGHT / height;
+              height = MAX_HEIGHT;
+            }
+          }
+
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx?.drawImage(img, 0, 0, width, height);
+
+          // Compress to JPEG with 0.7 quality
+          const dataUrl = canvas.toDataURL('image/jpeg', 0.7);
+          setFotoMotifUrl(dataUrl);
+        };
+        img.src = event.target?.result as string;
       };
       reader.readAsDataURL(file);
     }
@@ -82,10 +143,14 @@ export const SPKModalForm: React.FC<SPKModalFormProps> = ({
       deadline,
       keterangan: keterangan.trim(),
       foto_motif_url: fotoMotifUrl,
-      current_stage: 1,
+      current_stage: initialData ? initialData.current_stage : 1,
       status_design: statusDesign,
       is_urgent: isUrgent,
-      pic_terakhir: `Admin (${pabrik})`,
+      pic_terakhir: initialData ? initialData.pic_terakhir : `Admin (${pabrik})`,
+      qc_meter_riil: initialData?.qc_meter_riil,
+      qc_roll_details: initialData?.qc_roll_details,
+      qc_catatan: initialData?.qc_catatan,
+      created_at: initialData?.created_at,
     });
 
     onClose();
@@ -105,7 +170,7 @@ export const SPKModalForm: React.FC<SPKModalFormProps> = ({
             <div className="flex items-center gap-2">
               <i className="fa-solid fa-file-circle-plus text-gold-300 text-base"></i>
               <h2 className="text-base sm:text-lg font-bold tracking-tight">
-                Buat SPK Baru
+                {initialData ? 'Edit SPK' : 'Buat SPK Baru'}
               </h2>
             </div>
             <p className="text-xs text-brand-200 mt-0.5">
@@ -361,7 +426,7 @@ export const SPKModalForm: React.FC<SPKModalFormProps> = ({
               className="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-gradient-to-r from-brand-900 to-brand-800 hover:from-black hover:to-brand-900 text-white text-xs sm:text-sm font-bold shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 border border-gold-300/40"
             >
               <i className="fa-solid fa-check text-gold-300 text-xs"></i>
-              <span>Simpan SPK</span>
+              <span>{initialData ? 'Simpan Perubahan' : 'Simpan SPK'}</span>
             </button>
           </div>
 
