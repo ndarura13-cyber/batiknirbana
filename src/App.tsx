@@ -690,7 +690,7 @@ export const App: React.FC = () => {
           setSpkToEdit(null);
         }}
         onSubmit={handleCreateOrUpdateSPK}
-        existingCount={spkList.length}
+        spkList={spkList}
         initialData={spkToEdit || undefined}
       />
 

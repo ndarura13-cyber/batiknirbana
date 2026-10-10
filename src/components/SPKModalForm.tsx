@@ -5,7 +5,7 @@ interface SPKModalFormProps {
   isOpen: boolean;
   onClose: () => void;
   onSubmit: (data: Omit<SPKItem, 'id'>) => void;
-  existingCount: number;
+  spkList: SPKItem[];
   initialData?: SPKItem;
 }
 
@@ -13,7 +13,7 @@ export const SPKModalForm: React.FC<SPKModalFormProps> = ({
   isOpen,
   onClose,
   onSubmit,
-  existingCount,
+  spkList,
   initialData,
 }) => {
   const today = new Date().toISOString().split('T')[0];
@@ -76,7 +76,20 @@ export const SPKModalForm: React.FC<SPKModalFormProps> = ({
   };
 
   const ym = today.slice(2, 4) + today.slice(5, 7);
-  const nomorUrut = String(existingCount + 1).padStart(3, '0');
+
+  // Cari nomor urut terbesar untuk pabrik dan bulan yang sama
+  const maxUrut = spkList
+    .filter(s => s.nomor_spk && s.nomor_spk.startsWith(`SPK-${getPabrikCode(pabrik)}-${ym}`))
+    .reduce((max, s) => {
+      const parts = s.nomor_spk.split('-');
+      if (parts.length === 4) {
+        const urut = parseInt(parts[3], 10);
+        return urut > max ? urut : max;
+      }
+      return max;
+    }, 0);
+
+  const nomorUrut = String(maxUrut + 1).padStart(3, '0');
   const generatedNomorSPK = initialData ? initialData.nomor_spk : `SPK-${getPabrikCode(pabrik)}-${ym}-${nomorUrut}`;
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -160,7 +173,7 @@ export const SPKModalForm: React.FC<SPKModalFormProps> = ({
     <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/60 backdrop-blur-xs transition-all animate-fadeIn">
       {/* Slide-Up Bottom Sheet on Mobile, Centered Modal on Desktop */}
       <div className="relative w-full max-w-2xl bg-white rounded-t-3xl sm:rounded-3xl shadow-2xl border border-stone-200 overflow-hidden my-0 sm:my-8 max-h-[92vh] flex flex-col transform transition-all animate-slideUp sm:animate-scaleIn">
-        
+
         {/* Handle Bar untuk Mobile Drag Feel */}
         <div className="w-12 h-1.5 bg-stone-300 rounded-full mx-auto mt-3 mb-1 sm:hidden shrink-0" />
 
@@ -187,7 +200,7 @@ export const SPKModalForm: React.FC<SPKModalFormProps> = ({
 
         {/* Form Isi Scrollable */}
         <form onSubmit={handleSubmit} className="p-5 sm:p-6 space-y-4 overflow-y-auto flex-1">
-          
+
           {/* Baris 1: Nama Motif & Pemesan */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
             <div>
@@ -232,11 +245,10 @@ export const SPKModalForm: React.FC<SPKModalFormProps> = ({
                     key={p}
                     type="button"
                     onClick={() => setPabrik(p)}
-                    className={`py-2.5 px-3 rounded-xl border text-xs font-bold transition-all flex items-center justify-center gap-1.5 ${
-                      isSelected
+                    className={`py-2.5 px-3 rounded-xl border text-xs font-bold transition-all flex items-center justify-center gap-1.5 ${isSelected
                         ? 'border-brand-900 bg-brand-900 text-white shadow-xs'
                         : 'border-stone-200 bg-stone-50 hover:bg-stone-100 text-stone-700'
-                    }`}
+                      }`}
                   >
                     <i className="fa-solid fa-industry text-[11px]"></i>
                     <span className="truncate">{p}</span>
@@ -387,11 +399,10 @@ export const SPKModalForm: React.FC<SPKModalFormProps> = ({
               <button
                 type="button"
                 onClick={() => setStatusDesign(statusDesign === 'Approved' ? 'Pending' : 'Approved')}
-                className={`px-3 py-1 rounded-lg text-xs font-bold transition-all ${
-                  statusDesign === 'Approved'
+                className={`px-3 py-1 rounded-lg text-xs font-bold transition-all ${statusDesign === 'Approved'
                     ? 'bg-emerald-600 text-white'
                     : 'bg-amber-100 text-amber-800 border border-amber-300'
-                }`}
+                  }`}
               >
                 {statusDesign === 'Approved' ? 'Sudah ACC' : 'Pending ACC'}
               </button>
