@@ -163,46 +163,56 @@ export const apiSaveSPK = async (item: Omit<SPKItem, 'id'>): Promise<SPKItem | n
   }
 };
 
-export const apiUpdateSPK = async (id: string, item: Omit<SPKItem, 'id'>): Promise<boolean> => {
-  if (!supabase) return false;
+export const apiUpdateSPK = async (id: string, item: Omit<SPKItem, 'id'>): Promise<SPKItem | null> => {
+  if (!supabase) {
+    alert('Koneksi Supabase belum aktif.');
+    return null;
+  }
 
   try {
-    const payload = {
+    const payload: any = {
       nama_produksi: item.nama_produksi,
       nama_pemesan: item.nama_pemesan,
       pabrik: item.pabrik,
       bahan: item.bahan,
       obat: item.obat,
-      jumlah_meter: item.jumlah_meter,
-      jumlah_warna: item.jumlah_warna,
+      jumlah_meter: Number(item.jumlah_meter),
+      jumlah_warna: Number(item.jumlah_warna),
       tanggal_masuk: item.tanggal_masuk,
       deadline: item.deadline,
-      keterangan: item.keterangan,
-      foto_motif_url: item.foto_motif_url,
-      current_stage: item.current_stage,
-      status_design: item.status_design,
-      is_urgent: item.is_urgent,
-      pic_terakhir: item.pic_terakhir,
-      qc_meter_riil: item.qc_meter_riil,
-      qc_catatan: item.qc_catatan,
-      qc_roll_details: item.qc_roll_details,
+      keterangan: item.keterangan || '',
+      foto_motif_url: item.foto_motif_url || '',
+      current_stage: item.current_stage || 1,
+      status_design: item.status_design || 'Pending',
+      is_urgent: Boolean(item.is_urgent),
+      pic_terakhir: item.pic_terakhir || 'Admin',
+      updated_at: new Date().toISOString(),
     };
 
-    const { error } = await supabase
+    if (item.qc_meter_riil !== undefined) payload.qc_meter_riil = item.qc_meter_riil;
+    if (item.qc_catatan !== undefined) payload.qc_catatan = item.qc_catatan;
+    if (item.qc_roll_details !== undefined) payload.qc_roll_details = item.qc_roll_details;
+
+    const { data, error } = await supabase
       .from('spk')
       .update(payload)
-      .eq('id', id);
+      .eq('id', id)
+      .select()
+      .single();
 
     if (error) {
       console.error('Error update SPK:', error.message);
-      return false;
+      alert('Gagal mengupdate SPK: ' + error.message);
+      return null;
     }
-    return true;
-  } catch (err) {
+    return data as SPKItem;
+  } catch (err: any) {
     console.error('Exception update SPK:', err);
-    return false;
+    alert('Terjadi kesalahan saat mengupdate SPK: ' + (err?.message || err));
+    return null;
   }
 };
+
 
 export const apiUpdateStage = async (
   id: string,

@@ -11,6 +11,7 @@ interface SPKCardProps {
   isAdmin?: boolean;
   onDeleteSPK?: (spk: SPKItem) => void;
   onOpenTracking?: (spk: SPKItem) => void;
+  onEditSPK?: (spk: SPKItem) => void;
 }
 
 export const SPKCard: React.FC<SPKCardProps> = ({
@@ -23,6 +24,7 @@ export const SPKCard: React.FC<SPKCardProps> = ({
   isAdmin,
   onDeleteSPK,
   onOpenTracking,
+  onEditSPK,
 }) => {
   const now = new Date();
   const deadlineDate = new Date(spk.deadline);
@@ -134,6 +136,21 @@ export const SPKCard: React.FC<SPKCardProps> = ({
               </button>
             )}
 
+            {/* Tombol Edit Khusus Admin Pusat */}
+            {isAdmin && onEditSPK && (
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onEditSPK(spk);
+                }}
+                className="p-1.5 rounded-lg text-stone-400 hover:text-blue-600 hover:bg-blue-50 transition-colors"
+                title="Edit SPK (Ubah Target Meter, Tanggal, Pabrik, Motif)"
+              >
+                <i className="fa-solid fa-pen-to-square text-xs"></i>
+              </button>
+            )}
+
             {/* Tombol Hapus Khusus Admin Pusat */}
             {isAdmin && onDeleteSPK && (
               <button
@@ -171,6 +188,23 @@ export const SPKCard: React.FC<SPKCardProps> = ({
           <div className="flex items-center gap-1.5" title="Target Selesai">
             <i className="fa-regular fa-calendar text-stone-400 text-xs"></i>
             <span className={`font-semibold ${isUrgent ? 'text-red-600 font-bold' : 'text-stone-800'}`}>
+              {formatDate(spk.deadline)}
+            </span>
+          </div>
+        </div>
+
+        {/* Informasi Spesifikasi (Mobile View Compact) */}
+        <div className="sm:hidden flex flex-wrap items-center justify-between text-[11px] text-stone-600 bg-stone-50/90 p-2 rounded-xl border border-stone-100 mt-2 gap-1.5">
+          <div className="flex items-center gap-1 font-medium text-stone-700">
+            <i className="fa-solid fa-scroll text-stone-400 text-[10px]"></i>
+            <span>{spk.bahan} ({spk.obat})</span>
+          </div>
+          <div className="flex items-center gap-2 font-semibold">
+            <span className="text-brand-900 bg-brand-50 px-1.5 py-0.5 rounded border border-brand-200/60 font-mono">
+              {spk.jumlah_meter}m
+            </span>
+            <span className={isUrgent ? 'text-red-600 font-bold' : 'text-stone-700'}>
+              <i className="fa-regular fa-calendar text-[10px] mr-1"></i>
               {formatDate(spk.deadline)}
             </span>
           </div>

@@ -19,13 +19,30 @@ export const SPKModalForm: React.FC<SPKModalFormProps> = ({
   const today = new Date().toISOString().split('T')[0];
   const nextWeek = new Date(Date.now() + 6 * 24 * 3600 * 1000).toISOString().split('T')[0];
 
+  const formatToInputDate = (dateVal?: string | null, fallback = '') => {
+    if (!dateVal) return fallback;
+    try {
+      const clean = String(dateVal).split('T')[0].split(' ')[0];
+      if (/^\d{4}-\d{2}-\d{2}$/.test(clean)) {
+        return clean;
+      }
+      const d = new Date(dateVal);
+      if (!isNaN(d.getTime())) {
+        return d.toISOString().split('T')[0];
+      }
+      return clean;
+    } catch {
+      return fallback;
+    }
+  };
+
   const [pabrik, setPabrik] = useState<Pabrik>('Pasar Kembang');
   const [namaProduksi, setNamaProduksi] = useState('');
   const [namaPemesan, setNamaPemesan] = useState('');
   const [bahan, setBahan] = useState('Primis');
   const [obat, setObat] = useState('Reaktif');
-  const [jumlahMeter, setJumlahMeter] = useState<number>(200);
-  const [jumlahWarna, setJumlahWarna] = useState<number>(3);
+  const [jumlahMeter, setJumlahMeter] = useState<number | string>(200);
+  const [jumlahWarna, setJumlahWarna] = useState<number | string>(3);
   const [tanggalMasuk, setTanggalMasuk] = useState(today);
   const [deadline, setDeadline] = useState(nextWeek);
   const [keterangan, setKeterangan] = useState('');
@@ -42,8 +59,8 @@ export const SPKModalForm: React.FC<SPKModalFormProps> = ({
       setObat(initialData.obat);
       setJumlahMeter(initialData.jumlah_meter);
       setJumlahWarna(initialData.jumlah_warna);
-      setTanggalMasuk(initialData.tanggal_masuk);
-      setDeadline(initialData.deadline);
+      setTanggalMasuk(formatToInputDate(initialData.tanggal_masuk, today));
+      setDeadline(formatToInputDate(initialData.deadline, nextWeek));
       setKeterangan(initialData.keterangan || '');
       setFotoMotifUrl(initialData.foto_motif_url || '/batik_parang_kusuma.png');
       setStatusDesign(initialData.status_design);
@@ -143,6 +160,28 @@ export const SPKModalForm: React.FC<SPKModalFormProps> = ({
       return;
     }
 
+    const parsedMeter = Number(jumlahMeter);
+    if (!jumlahMeter || isNaN(parsedMeter) || parsedMeter <= 0) {
+      alert('Mohon masukkan jumlah target meter produksi yang valid (angka lebih dari 0)');
+      return;
+    }
+
+    const parsedWarna = Number(jumlahWarna);
+    if (!jumlahWarna || isNaN(parsedWarna) || parsedWarna <= 0) {
+      alert('Mohon masukkan jumlah warna yang valid (minimal 1)');
+      return;
+    }
+
+    if (!tanggalMasuk) {
+      alert('Mohon tentukan tanggal masuk SPK');
+      return;
+    }
+
+    if (!deadline) {
+      alert('Mohon tentukan target tanggal selesai SPK');
+      return;
+    }
+
     onSubmit({
       nomor_spk: generatedNomorSPK,
       nama_produksi: namaProduksi.trim(),
@@ -150,8 +189,8 @@ export const SPKModalForm: React.FC<SPKModalFormProps> = ({
       pabrik,
       bahan,
       obat,
-      jumlah_meter: Number(jumlahMeter),
-      jumlah_warna: Number(jumlahWarna),
+      jumlah_meter: parsedMeter,
+      jumlah_warna: parsedWarna,
       tanggal_masuk: tanggalMasuk,
       deadline,
       keterangan: keterangan.trim(),
@@ -170,7 +209,7 @@ export const SPKModalForm: React.FC<SPKModalFormProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/60 backdrop-blur-xs transition-all animate-fadeIn">
+    <div className="fixed inset-0 z-[90] flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/60 backdrop-blur-xs transition-all animate-fadeIn">
       {/* Slide-Up Bottom Sheet on Mobile, Centered Modal on Desktop */}
       <div className="relative w-full max-w-2xl bg-white rounded-t-3xl sm:rounded-3xl shadow-2xl border border-stone-200 overflow-hidden my-0 sm:my-8 max-h-[92vh] flex flex-col transform transition-all animate-slideUp sm:animate-scaleIn">
 
@@ -294,30 +333,32 @@ export const SPKModalForm: React.FC<SPKModalFormProps> = ({
 
             <div>
               <label className="block text-xs font-semibold text-stone-700 mb-1">
-                Target (Meter)
+                Target (Meter) <span className="text-red-500">*</span>
               </label>
               <input
                 type="number"
-                min="10"
-                step="5"
+                min="1"
+                step="any"
                 required
+                placeholder="Misal: 192"
                 value={jumlahMeter}
-                onChange={(e) => setJumlahMeter(Number(e.target.value))}
+                onChange={(e) => setJumlahMeter(e.target.value === '' ? '' : e.target.value)}
                 className="w-full px-3 py-2.5 rounded-xl border border-stone-300 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-brand-800/40"
               />
             </div>
 
             <div>
               <label className="block text-xs font-semibold text-stone-700 mb-1">
-                Jml Warna
+                Jml Warna <span className="text-red-500">*</span>
               </label>
               <input
                 type="number"
                 min="1"
-                max="12"
+                max="20"
+                step="1"
                 required
                 value={jumlahWarna}
-                onChange={(e) => setJumlahWarna(Number(e.target.value))}
+                onChange={(e) => setJumlahWarna(e.target.value === '' ? '' : e.target.value)}
                 className="w-full px-3 py-2.5 rounded-xl border border-stone-300 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-brand-800/40"
               />
             </div>
@@ -327,7 +368,7 @@ export const SPKModalForm: React.FC<SPKModalFormProps> = ({
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
             <div>
               <label className="block text-xs font-semibold text-stone-700 mb-1">
-                Tanggal Masuk
+                Tanggal Masuk <span className="text-red-500">*</span>
               </label>
               <input
                 type="date"
@@ -340,7 +381,7 @@ export const SPKModalForm: React.FC<SPKModalFormProps> = ({
 
             <div>
               <label className="block text-xs font-semibold text-stone-700 mb-1">
-                Target Selesai
+                Target Selesai <span className="text-red-500">*</span>
               </label>
               <input
                 type="date"
