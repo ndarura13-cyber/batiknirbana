@@ -363,20 +363,9 @@ export const SPKModalForm: React.FC<SPKModalFormProps> = ({
             </div>
 
             <div>
-              <div className="flex items-center justify-between mb-1">
-                <label className="text-xs font-semibold text-stone-700">
-                  Target {unitMode === 'meter' ? '(Meter)' : '(Yard)'} <span className="text-red-500">*</span>
-                </label>
-                <button
-                  type="button"
-                  onClick={() => setUnitMode(prev => prev === 'meter' ? 'yard' : 'meter')}
-                  className="text-[10px] font-bold text-brand-900 bg-brand-50 hover:bg-brand-100 border border-brand-200/80 px-1.5 py-0.5 rounded-md flex items-center gap-1 transition-all active:scale-95"
-                  title="Klik untuk beralih mode input antara Meter dan Yard"
-                >
-                  <i className="fa-solid fa-repeat text-[9px] text-amber-600"></i>
-                  <span>{unitMode === 'meter' ? 'Input Yard' : 'Input Meter'}</span>
-                </button>
-              </div>
+              <label className="block text-xs font-semibold text-stone-700 mb-1">
+                Target ({unitMode === 'meter' ? 'Meter' : 'Yard'}) <span className="text-red-500">*</span>
+              </label>
 
               <div className="relative">
                 <input
@@ -393,25 +382,17 @@ export const SPKModalForm: React.FC<SPKModalFormProps> = ({
                       handleYardChange(e.target.value);
                     }
                   }}
-                  className="w-full pl-3 pr-12 py-2.5 rounded-xl border border-stone-300 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-brand-800/40"
+                  className="w-full pl-3 pr-20 py-2.5 rounded-xl border border-stone-300 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-brand-800/40"
                 />
-                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] font-bold text-stone-500 bg-stone-100 px-1.5 py-0.5 rounded border border-stone-200 pointer-events-none">
-                  {unitMode === 'meter' ? 'Meter' : 'Yard'}
-                </span>
-              </div>
-
-              {/* Tampilan Live Konversi Real-Time */}
-              <div className="mt-1 flex items-center justify-between text-[10px] text-stone-500">
-                {unitMode === 'meter' ? (
-                  <span>
-                    Setara: <strong className="text-brand-900 font-mono">{yardValue ? `${yardValue} Yard` : '-'}</strong>
-                  </span>
-                ) : (
-                  <span>
-                    Hasil: <strong className="text-brand-900 font-mono">{jumlahMeter ? `${jumlahMeter} Meter` : '-'}</strong>
-                  </span>
-                )}
-                <span className="text-[9px] text-stone-400">1 yd = 0.9144m</span>
+                <button
+                  type="button"
+                  onClick={() => setUnitMode(prev => prev === 'meter' ? 'yard' : 'meter')}
+                  className="absolute right-1.5 top-1/2 -translate-y-1/2 px-2 py-1 rounded-lg text-[11px] font-bold transition-all flex items-center gap-1 border active:scale-95 shadow-2xs select-none bg-stone-100 hover:bg-brand-50 text-stone-700 hover:text-brand-900 border-stone-300 hover:border-brand-300"
+                  title={unitMode === 'meter' ? (jumlahMeter ? `${jumlahMeter} Meter = ${yardValue} Yard (Klik untuk beralih ke Yard)` : "Klik untuk beralih ke satuan Yard") : (yardValue ? `${yardValue} Yard = ${jumlahMeter} Meter (Klik untuk beralih ke Meter)` : "Klik untuk beralih ke satuan Meter")}
+                >
+                  <span>{unitMode === 'meter' ? 'Meter' : 'Yard'}</span>
+                  <i className="fa-solid fa-arrows-rotate text-[10px] text-amber-600"></i>
+                </button>
               </div>
             </div>
 
