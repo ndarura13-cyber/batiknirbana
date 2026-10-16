@@ -119,8 +119,14 @@ html {
     overflow: visible !important;
   }
 
-  /* Sembunyikan semua elemen lain saat print */
-  header, footer, main, .no-print {
+  /* Sembunyikan semua elemen navigasi, header, main, dan floating tombol saat print */
+  header, footer, main, nav, aside, .no-print, [class*="no-print"] {
+    display: none !important;
+  }
+
+  /* Pastikan seluruh tombol action dan floating element di luar dokumen SPK tersembunyi */
+  button:not(.spk-print-document button),
+  .fixed:not(.spk-print-modal-container) {
     display: none !important;
   }
 

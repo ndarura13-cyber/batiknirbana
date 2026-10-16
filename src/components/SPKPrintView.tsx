@@ -139,7 +139,9 @@ export const SPKPrintView: React.FC<SPKPrintViewProps> = ({
                 {/* Kolom Kiri: Jumlah Target */}
                 <div className="flex items-baseline">
                   <span className="w-20 sm:w-24 font-semibold text-stone-800 shrink-0">Jumlah</span>
-                  <span className="font-medium text-stone-950">: {spk.jumlah_meter} Meter</span>
+                  <span className="font-medium text-stone-950">
+                    : {spk.jumlah_meter} Meter <span className="text-[11px] text-stone-600 font-normal">({Math.round(spk.jumlah_meter * 1.093613 * 10) / 10} Yard)</span>
+                  </span>
                 </div>
 
                 {/* Kolom Kanan: Jumlah Warna */}

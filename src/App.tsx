@@ -646,7 +646,7 @@ export const App: React.FC = () => {
       <button
         type="button"
         onClick={() => setIsNewSPKOpen(true)}
-        className={`hidden sm:flex items-center gap-2.5 px-5 py-3 rounded-full bg-gradient-to-r from-brand-900 via-brand-800 to-brand-900 hover:from-black hover:to-brand-950 text-white font-bold text-sm shadow-xl shadow-brand-950/30 border border-gold-300/50 fixed bottom-6 right-6 z-30 transition-all duration-300 ${isTopButtonVisible
+        className={`hidden sm:flex no-print print:hidden items-center gap-2.5 px-5 py-3 rounded-full bg-gradient-to-r from-brand-900 via-brand-800 to-brand-900 hover:from-black hover:to-brand-950 text-white font-bold text-sm shadow-xl shadow-brand-950/30 border border-gold-300/50 fixed bottom-6 right-6 z-30 transition-all duration-300 ${isTopButtonVisible
             ? 'opacity-0 translate-y-8 pointer-events-none'
             : 'opacity-100 translate-y-0 active:scale-95'
           }`}

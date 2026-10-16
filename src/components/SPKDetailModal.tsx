@@ -152,7 +152,9 @@ export const SPKDetailModal: React.FC<SPKDetailModalProps> = ({
                 </div>
                 <div className="flex justify-between items-center py-0.5 border-b border-stone-100">
                   <span className="text-stone-500">Target:</span>
-                  <span className="font-extrabold text-brand-900">{spk.jumlah_meter} Meter</span>
+                  <span className="font-extrabold text-brand-900">
+                    {spk.jumlah_meter} Meter <span className="text-xs text-stone-500 font-normal">({Math.round(spk.jumlah_meter * 1.093613 * 10) / 10} Yard)</span>
+                  </span>
                 </div>
                 <div className="flex justify-between items-center py-0.5 border-b border-stone-100">
                   <span className="text-stone-500">Masuk:</span>

@@ -42,6 +42,8 @@ export const SPKModalForm: React.FC<SPKModalFormProps> = ({
   const [bahan, setBahan] = useState('Primis');
   const [obat, setObat] = useState('Reaktif');
   const [jumlahMeter, setJumlahMeter] = useState<number | string>(200);
+  const [unitMode, setUnitMode] = useState<'meter' | 'yard'>('meter');
+  const [yardValue, setYardValue] = useState<number | string>(218.72);
   const [jumlahWarna, setJumlahWarna] = useState<number | string>(3);
   const [tanggalMasuk, setTanggalMasuk] = useState(today);
   const [deadline, setDeadline] = useState(nextWeek);
@@ -49,6 +51,27 @@ export const SPKModalForm: React.FC<SPKModalFormProps> = ({
   const [fotoMotifUrl, setFotoMotifUrl] = useState('/batik_parang_kusuma.png');
   const [statusDesign, setStatusDesign] = useState<'Pending' | 'Approved'>('Pending');
   const [isUrgent, setIsUrgent] = useState(false);
+
+  // Konversi Satuan: 1 Yard = 0.9144 Meter, 1 Meter = 1.093613 Yard
+  const handleMeterChange = (valStr: string) => {
+    setJumlahMeter(valStr);
+    if (valStr === '' || isNaN(Number(valStr))) {
+      setYardValue('');
+    } else {
+      const y = Number(valStr) * 1.093613;
+      setYardValue(Math.round(y * 100) / 100);
+    }
+  };
+
+  const handleYardChange = (valStr: string) => {
+    setYardValue(valStr);
+    if (valStr === '' || isNaN(Number(valStr))) {
+      setJumlahMeter('');
+    } else {
+      const m = Number(valStr) * 0.9144;
+      setJumlahMeter(Math.round(m * 100) / 100);
+    }
+  };
 
   React.useEffect(() => {
     if (initialData && isOpen) {
@@ -58,6 +81,11 @@ export const SPKModalForm: React.FC<SPKModalFormProps> = ({
       setBahan(initialData.bahan);
       setObat(initialData.obat);
       setJumlahMeter(initialData.jumlah_meter);
+      const calculatedYard = initialData.jumlah_meter
+        ? Math.round(Number(initialData.jumlah_meter) * 1.093613 * 100) / 100
+        : '';
+      setYardValue(calculatedYard);
+      setUnitMode('meter');
       setJumlahWarna(initialData.jumlah_warna);
       setTanggalMasuk(formatToInputDate(initialData.tanggal_masuk, today));
       setDeadline(formatToInputDate(initialData.deadline, nextWeek));
@@ -72,6 +100,8 @@ export const SPKModalForm: React.FC<SPKModalFormProps> = ({
       setBahan('Primis');
       setObat('Reaktif');
       setJumlahMeter(200);
+      setYardValue(218.72);
+      setUnitMode('meter');
       setJumlahWarna(3);
       setTanggalMasuk(today);
       setDeadline(nextWeek);
@@ -310,6 +340,7 @@ export const SPKModalForm: React.FC<SPKModalFormProps> = ({
               >
                 <option value="Prima">Prima</option>
                 <option value="Primis">Primis</option>
+                <option value="Berkulin">Berkulin</option>
                 <option value="Dobby">Dobby</option>
                 <option value="Sanwos">Sanwos</option>
                 <option value="Lainnya">Lainnya</option>
@@ -332,19 +363,56 @@ export const SPKModalForm: React.FC<SPKModalFormProps> = ({
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-stone-700 mb-1">
-                Target (Meter) <span className="text-red-500">*</span>
-              </label>
-              <input
-                type="number"
-                min="1"
-                step="any"
-                required
-                placeholder="Misal: 192"
-                value={jumlahMeter}
-                onChange={(e) => setJumlahMeter(e.target.value === '' ? '' : e.target.value)}
-                className="w-full px-3 py-2.5 rounded-xl border border-stone-300 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-brand-800/40"
-              />
+              <div className="flex items-center justify-between mb-1">
+                <label className="text-xs font-semibold text-stone-700">
+                  Target {unitMode === 'meter' ? '(Meter)' : '(Yard)'} <span className="text-red-500">*</span>
+                </label>
+                <button
+                  type="button"
+                  onClick={() => setUnitMode(prev => prev === 'meter' ? 'yard' : 'meter')}
+                  className="text-[10px] font-bold text-brand-900 bg-brand-50 hover:bg-brand-100 border border-brand-200/80 px-1.5 py-0.5 rounded-md flex items-center gap-1 transition-all active:scale-95"
+                  title="Klik untuk beralih mode input antara Meter dan Yard"
+                >
+                  <i className="fa-solid fa-repeat text-[9px] text-amber-600"></i>
+                  <span>{unitMode === 'meter' ? 'Input Yard' : 'Input Meter'}</span>
+                </button>
+              </div>
+
+              <div className="relative">
+                <input
+                  type="number"
+                  min="1"
+                  step="any"
+                  required
+                  placeholder={unitMode === 'meter' ? "Misal: 192" : "Misal: 210"}
+                  value={unitMode === 'meter' ? jumlahMeter : yardValue}
+                  onChange={(e) => {
+                    if (unitMode === 'meter') {
+                      handleMeterChange(e.target.value);
+                    } else {
+                      handleYardChange(e.target.value);
+                    }
+                  }}
+                  className="w-full pl-3 pr-12 py-2.5 rounded-xl border border-stone-300 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-brand-800/40"
+                />
+                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] font-bold text-stone-500 bg-stone-100 px-1.5 py-0.5 rounded border border-stone-200 pointer-events-none">
+                  {unitMode === 'meter' ? 'Meter' : 'Yard'}
+                </span>
+              </div>
+
+              {/* Tampilan Live Konversi Real-Time */}
+              <div className="mt-1 flex items-center justify-between text-[10px] text-stone-500">
+                {unitMode === 'meter' ? (
+                  <span>
+                    Setara: <strong className="text-brand-900 font-mono">{yardValue ? `${yardValue} Yard` : '-'}</strong>
+                  </span>
+                ) : (
+                  <span>
+                    Hasil: <strong className="text-brand-900 font-mono">{jumlahMeter ? `${jumlahMeter} Meter` : '-'}</strong>
+                  </span>
+                )}
+                <span className="text-[9px] text-stone-400">1 yd = 0.9144m</span>
+              </div>
             </div>
 
             <div>
