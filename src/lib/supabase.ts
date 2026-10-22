@@ -265,7 +265,7 @@ export const apiUpdateQC = async (
         qc_meter_riil: meterRiil,
         qc_roll_details: rollDetails,
         qc_catatan: catatan,
-        current_stage: 5,
+        current_stage: 6,
         pic_terakhir: picName,
         updated_at: new Date().toISOString(),
       })

@@ -3,7 +3,6 @@ import React from 'react';
 interface DatabaseSettingsModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSaveConfig?: (url: string, key: string) => void;
   isDbConnected: boolean;
 }
 

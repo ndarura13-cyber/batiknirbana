@@ -5,7 +5,6 @@ interface HeaderProps {
   currentRole: UserRole;
   currentPabrik?: Pabrik;
   onOpenRoleModal: () => void;
-  onOpenNewSPKModal: () => void;
   onOpenDbModal: () => void;
   onRequestLogout: () => void;
   onBackToLanding: () => void;
@@ -16,7 +15,6 @@ export const Header: React.FC<HeaderProps> = ({
   currentRole,
   currentPabrik,
   onOpenRoleModal,
-  onOpenNewSPKModal,
   onOpenDbModal,
   onRequestLogout,
   onBackToLanding,

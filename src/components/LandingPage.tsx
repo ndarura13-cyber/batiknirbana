@@ -6,12 +6,12 @@ interface LandingPageProps {
 }
 
 const NAV_LINKS = [
-  { href: '#beranda', label: 'Beranda' },
-  { href: '#tentang', label: 'Tentang' },
-  { href: '#portofolio', label: 'Portofolio' },
-  { href: '#layanan', label: 'Layanan' },
-  { href: '#testimoni', label: 'Testimoni' },
-  { href: '#kontak', label: 'Kontak' },
+  { href: '#beranda', label: 'Beranda', icon: 'fa-house' },
+  { href: '#tentang', label: 'Tentang', icon: 'fa-circle-info' },
+  { href: '#portofolio', label: 'Portofolio', icon: 'fa-images' },
+  { href: '#layanan', label: 'Layanan', icon: 'fa-hand-holding-heart' },
+  { href: '#testimoni', label: 'Testimoni', icon: 'fa-comments' },
+  { href: '#kontak', label: 'Kontak', icon: 'fa-envelope' },
 ];
 
 const KEUNGGULAN = [
@@ -126,10 +126,11 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
           NAVBAR
       ═══════════════════════════════════════════════ */}
       <header
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled
-          ? 'bg-white/95 backdrop-blur-md shadow-sm border-b border-stone-100'
-          : 'bg-transparent'
-          }`}
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+          isScrolled || mobileNavOpen
+            ? 'bg-white shadow-md border-b border-stone-200'
+            : 'bg-transparent'
+        }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16 sm:h-20">
@@ -148,10 +149,10 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
                 onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
               />
               <div className="hidden sm:block">
-                <p className={`font-serif font-bold text-base leading-tight tracking-wide ${isScrolled ? 'text-brand-900' : 'text-white'}`}>
+                <p className={`font-serif font-bold text-base leading-tight tracking-wide ${isScrolled || mobileNavOpen ? 'text-brand-900' : 'text-white'}`}>
                   Nirbana Batik
                 </p>
-                <p className={`text-[10px] tracking-widest font-medium uppercase ${isScrolled ? 'text-stone-500' : 'text-gold-200'}`}>
+                <p className={`text-[10px] tracking-widest font-medium uppercase ${isScrolled || mobileNavOpen ? 'text-stone-500' : 'text-gold-200'}`}>
                   Printing · Cetak · Custom
                 </p>
               </div>
@@ -187,9 +188,12 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
               {/* Mobile hamburger */}
               <button
                 onClick={() => setMobileNavOpen(!mobileNavOpen)}
-                className={`lg:hidden p-2 rounded-xl transition-colors ${isScrolled ? 'text-stone-700 hover:bg-stone-100' : 'text-white hover:bg-white/10'
-                  }`}
-                aria-label="Buka menu navigasi"
+                className={`lg:hidden p-2.5 rounded-xl transition-colors ${
+                  isScrolled || mobileNavOpen
+                    ? 'text-stone-800 bg-stone-100 hover:bg-stone-200'
+                    : 'text-white bg-white/15 hover:bg-white/25 backdrop-blur-xs'
+                }`}
+                aria-label={mobileNavOpen ? 'Tutup menu navigasi' : 'Buka menu navigasi'}
                 aria-expanded={mobileNavOpen}
               >
                 <i className={`fa-solid ${mobileNavOpen ? 'fa-xmark' : 'fa-bars'} text-lg`}></i>
@@ -200,32 +204,58 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
 
         {/* Mobile Nav Dropdown */}
         {mobileNavOpen && (
-          <div className="lg:hidden bg-white/98 backdrop-blur-md border-t border-stone-100 shadow-lg animate-slideDown">
-            <nav className="max-w-7xl mx-auto px-4 py-3 flex flex-col gap-1">
-              {NAV_LINKS.map((link) => (
+          <div className="lg:hidden bg-white border-t border-stone-200 shadow-2xl animate-slideDown">
+            <nav className="max-w-7xl mx-auto px-4 py-3.5 flex flex-col gap-1.5">
+              {NAV_LINKS.map((link) => {
+                const isActive = activeSection === link.href.substring(1);
+                return (
+                  <button
+                    key={link.href}
+                    onClick={() => scrollTo(link.href)}
+                    className={`flex items-center justify-between text-left px-4 py-3 rounded-xl font-semibold transition-all text-sm ${
+                      isActive
+                        ? 'bg-brand-900 text-white shadow-sm'
+                        : 'text-stone-800 hover:bg-stone-100 hover:text-brand-900'
+                    }`}
+                  >
+                    <div className="flex items-center gap-3">
+                      <i className={`fa-solid ${link.icon} text-sm ${isActive ? 'text-gold-300' : 'text-stone-400'}`}></i>
+                      <span>{link.label}</span>
+                    </div>
+                    {isActive ? (
+                      <span className="w-2 h-2 rounded-full bg-gold-400"></span>
+                    ) : (
+                      <i className="fa-solid fa-chevron-right text-xs text-stone-300"></i>
+                    )}
+                  </button>
+                );
+              })}
+
+              <div className="pt-2 mt-2 border-t border-stone-100">
                 <button
-                  key={link.href}
-                  onClick={() => scrollTo(link.href)}
-                  className={`text-left px-4 py-3 rounded-xl font-semibold transition-colors text-sm ${
-                    activeSection === link.href.substring(1)
-                      ? 'bg-brand-50 text-brand-800'
-                      : 'text-stone-800 hover:bg-brand-50 hover:text-brand-800'
-                  }`}
+                  onClick={() => {
+                    setMobileNavOpen(false);
+                    onEnterApp();
+                  }}
+                  className="w-full flex items-center justify-center gap-2 px-4 py-3.5 rounded-xl bg-brand-900 hover:bg-brand-950 text-white font-bold text-sm shadow-md active:scale-98 transition-all"
                 >
-                  {link.label}
+                  <i className="fa-solid fa-right-to-bracket text-xs text-gold-300"></i>
+                  <span>Masuk ke Sistem SPK</span>
                 </button>
-              ))}
-              <button
-                onClick={onEnterApp}
-                className="mt-2 flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-brand-800 text-white font-bold text-sm active:scale-95 transition-all"
-              >
-                <i className="fa-solid fa-right-to-bracket text-xs"></i>
-                Sistem SPK
-              </button>
+              </div>
             </nav>
           </div>
         )}
       </header>
+
+      {/* Backdrop overlay when mobile menu is open */}
+      {mobileNavOpen && (
+        <div
+          className="fixed inset-0 bg-black/60 backdrop-blur-xs z-40 lg:hidden"
+          onClick={() => setMobileNavOpen(false)}
+          aria-hidden="true"
+        />
+      )}
 
       {/* ═══════════════════════════════════════════════
           HERO SECTION

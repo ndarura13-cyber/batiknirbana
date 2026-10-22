@@ -442,7 +442,6 @@ export const App: React.FC = () => {
         currentRole={currentRole}
         currentPabrik={currentPabrik}
         onOpenRoleModal={() => setIsRoleModalOpen(true)}
-        onOpenNewSPKModal={() => setIsNewSPKOpen(true)}
         onOpenDbModal={() => setIsDbModalOpen(true)}
         onRequestLogout={() => setIsLogoutConfirmOpen(true)}
         onBackToLanding={handleBackToLanding}
