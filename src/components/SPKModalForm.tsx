@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { SPKItem, Pabrik } from '../types/spk';
+import { CustomSelect } from './ui/CustomSelect';
 
 interface SPKModalFormProps {
   isOpen: boolean;
@@ -333,33 +334,24 @@ export const SPKModalForm: React.FC<SPKModalFormProps> = ({
               <label className="block text-xs font-semibold text-stone-700 mb-1">
                 Kain / Bahan
               </label>
-              <select
+              <CustomSelect
                 value={bahan}
-                onChange={(e) => setBahan(e.target.value)}
-                className="w-full px-3 py-2.5 rounded-xl border border-stone-300 text-xs sm:text-sm bg-white focus:outline-none focus:ring-2 focus:ring-brand-800/40"
-              >
-                <option value="Prima">Prima</option>
-                <option value="Primis">Primis</option>
-                <option value="Berkulin">Berkulin</option>
-                <option value="Dobby">Dobby</option>
-                <option value="Sanwos">Sanwos</option>
-                <option value="Lainnya">Lainnya</option>
-              </select>
+                onChange={(val) => setBahan(val)}
+                options={['Prima', 'Primis', 'Berkulin', 'Dobby', 'Sanwos', 'Lainnya']}
+                variant="form"
+              />
             </div>
 
             <div>
               <label className="block text-xs font-semibold text-stone-700 mb-1">
                 Jenis Obat
               </label>
-              <select
+              <CustomSelect
                 value={obat}
-                onChange={(e) => setObat(e.target.value)}
-                className="w-full px-3 py-2.5 rounded-xl border border-stone-300 text-xs sm:text-sm bg-white focus:outline-none focus:ring-2 focus:ring-brand-800/40"
-              >
-                <option value="Reaktif">Reaktif</option>
-                <option value="Disperse">Disperse</option>
-                <option value="Pigment">Pigment</option>
-              </select>
+                onChange={(val) => setObat(val)}
+                options={['Reaktif', 'Disperse', 'Pigment']}
+                variant="form"
+              />
             </div>
 
             <div>

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { UserRole, Pabrik } from '../types/spk';
 import { apiFetchRolePins, apiUpdateRolePin, DEFAULT_PINS } from '../lib/supabase';
+import { CustomSelect } from './ui/CustomSelect';
 
 interface RoleSwitcherModalProps {
   isOpen: boolean;
@@ -313,21 +314,16 @@ export const RoleSwitcherModal: React.FC<RoleSwitcherModalProps> = ({
               <label className="block text-xs font-bold text-stone-700 mb-1">
                 Pilih Posisi yang Ingin Diubah PIN-nya:
               </label>
-              <select
+              <CustomSelect
                 value={changeTargetRole}
-                onChange={(e) => {
-                  setChangeTargetRole(e.target.value as UserRole);
+                onChange={(val) => {
+                  setChangeTargetRole(val as UserRole);
                   setErrorMessage('');
                   setSuccessMessage('');
                 }}
-                className="w-full px-3 py-2 rounded-xl border border-stone-300 text-xs sm:text-sm bg-white font-semibold text-stone-800 focus:outline-none focus:ring-2 focus:ring-brand-800"
-              >
-                {ROLES.map(r => (
-                  <option key={r.role} value={r.role}>
-                    {r.title}
-                  </option>
-                ))}
-              </select>
+                options={ROLES.map(r => ({ value: r.role, label: r.title }))}
+                variant="form"
+              />
             </div>
 
             <div>

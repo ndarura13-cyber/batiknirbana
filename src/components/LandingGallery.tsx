@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { supabase } from '../lib/supabase';
+import { CustomSelect } from './ui/CustomSelect';
 
 interface GalleryItem {
   id: string;
@@ -266,140 +267,66 @@ export const LandingGallery: React.FC = () => {
         </button>
 
         {/* 1. Urutkan */}
-        <div className="relative flex-1 sm:flex-none">
-          <select
-            value={sortBy}
-            onChange={e => setSortBy(e.target.value as SortOption)}
-            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
-            aria-label="Urutkan Portofolio"
-          >
-            <option value="newest">Waktu SPK (Terbaru)</option>
-            <option value="oldest">Waktu SPK (Terlama)</option>
-            <option value="az">Abjad (A - Z)</option>
-            <option value="za">Abjad (Z - A)</option>
-          </select>
-          <div
-            className={`h-11 sm:h-10 px-3 sm:px-3.5 rounded-xl border bg-white flex items-center justify-center sm:justify-start gap-2 shadow-2xs transition-all ${
-              sortBy !== 'newest'
-                ? 'border-brand-700 bg-brand-50/40 text-brand-900 font-semibold'
-                : 'border-stone-200 text-stone-700 hover:border-stone-300'
-            }`}
-          >
-            <i className="fa-solid fa-arrow-down-short-wide text-brand-800 text-xs sm:text-sm"></i>
-            <span className="hidden sm:inline text-xs sm:text-sm font-medium text-stone-700 truncate max-w-[130px] lg:max-w-none">
-              {sortBy === 'newest'
-                ? 'Waktu SPK (Terbaru)'
-                : sortBy === 'oldest'
-                ? 'Waktu SPK (Terlama)'
-                : sortBy === 'az'
-                ? 'Abjad (A - Z)'
-                : 'Abjad (Z - A)'}
-            </span>
-            <i className="hidden sm:inline fa-solid fa-chevron-down text-[10px] text-stone-400 ml-0.5"></i>
-            {sortBy !== 'newest' && (
-              <span className="sm:hidden absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full bg-brand-700"></span>
-            )}
-          </div>
-        </div>
+        <CustomSelect
+          value={sortBy}
+          onChange={(val) => setSortBy(val as SortOption)}
+          options={[
+            { value: 'newest', label: 'Waktu SPK (Terbaru)' },
+            { value: 'oldest', label: 'Waktu SPK (Terlama)' },
+            { value: 'az', label: 'Abjad (A - Z)' },
+            { value: 'za', label: 'Abjad (Z - A)' },
+          ]}
+          icon="fa-arrow-down-short-wide"
+          variant="pill"
+          compactOnMobile={true}
+          isActiveHighlight={sortBy !== 'newest'}
+          title="Urutkan Portofolio"
+        />
 
         {/* 2. Nama Pemesan */}
-        <div className="relative flex-1 sm:flex-none">
-          <select
-            value={filterPemesan}
-            onChange={e => setFilterPemesan(e.target.value)}
-            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
-            aria-label="Filter Nama Pemesan"
-          >
-            <option value="all">Semua Pemesan</option>
-            {pemesanOptions.map(pemesan => (
-              <option key={pemesan} value={pemesan}>
-                {pemesan}
-              </option>
-            ))}
-          </select>
-          <div
-            className={`h-11 sm:h-10 px-3 sm:px-3.5 rounded-xl border bg-white flex items-center justify-center sm:justify-start gap-2 shadow-2xs transition-all ${
-              filterPemesan !== 'all'
-                ? 'border-brand-700 bg-brand-50/40 text-brand-900 font-semibold'
-                : 'border-stone-200 text-stone-700 hover:border-stone-300'
-            }`}
-          >
-            <i className="fa-solid fa-user text-brand-800 text-xs sm:text-sm"></i>
-            <span className="hidden sm:inline text-xs sm:text-sm font-medium text-stone-700 truncate max-w-[120px] lg:max-w-none">
-              {filterPemesan === 'all' ? 'Semua Pemesan' : filterPemesan}
-            </span>
-            <i className="hidden sm:inline fa-solid fa-chevron-down text-[10px] text-stone-400 ml-0.5"></i>
-            {filterPemesan !== 'all' && (
-              <span className="sm:hidden absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full bg-brand-700"></span>
-            )}
-          </div>
-        </div>
+        <CustomSelect
+          value={filterPemesan}
+          onChange={(val) => setFilterPemesan(val as string)}
+          options={[
+            { value: 'all', label: 'Semua Pemesan' },
+            ...pemesanOptions.map((p) => ({ value: p, label: p })),
+          ]}
+          icon="fa-user"
+          variant="pill"
+          compactOnMobile={true}
+          isActiveHighlight={filterPemesan !== 'all'}
+          title="Filter Nama Pemesan"
+        />
 
         {/* 3. Jenis Kain */}
-        <div className="relative flex-1 sm:flex-none">
-          <select
-            value={filterBahan}
-            onChange={e => setFilterBahan(e.target.value)}
-            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
-            aria-label="Filter Jenis Kain"
-          >
-            <option value="all">Semua Kain</option>
-            {bahanOptions.map(bahan => (
-              <option key={bahan} value={bahan}>
-                {bahan}
-              </option>
-            ))}
-          </select>
-          <div
-            className={`h-11 sm:h-10 px-3 sm:px-3.5 rounded-xl border bg-white flex items-center justify-center sm:justify-start gap-2 shadow-2xs transition-all ${
-              filterBahan !== 'all'
-                ? 'border-brand-700 bg-brand-50/40 text-brand-900 font-semibold'
-                : 'border-stone-200 text-stone-700 hover:border-stone-300'
-            }`}
-          >
-            <i className="fa-solid fa-layer-group text-brand-800 text-xs sm:text-sm"></i>
-            <span className="hidden sm:inline text-xs sm:text-sm font-medium text-stone-700 truncate max-w-[120px] lg:max-w-none">
-              {filterBahan === 'all' ? 'Semua Kain' : filterBahan}
-            </span>
-            <i className="hidden sm:inline fa-solid fa-chevron-down text-[10px] text-stone-400 ml-0.5"></i>
-            {filterBahan !== 'all' && (
-              <span className="sm:hidden absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full bg-brand-700"></span>
-            )}
-          </div>
-        </div>
+        <CustomSelect
+          value={filterBahan}
+          onChange={(val) => setFilterBahan(val as string)}
+          options={[
+            { value: 'all', label: 'Semua Kain' },
+            ...bahanOptions.map((b) => ({ value: b, label: b })),
+          ]}
+          icon="fa-layer-group"
+          variant="pill"
+          compactOnMobile={true}
+          isActiveHighlight={filterBahan !== 'all'}
+          title="Filter Jenis Kain"
+        />
 
         {/* 4. Jenis Obat */}
-        <div className="relative flex-1 sm:flex-none">
-          <select
-            value={filterObat}
-            onChange={e => setFilterObat(e.target.value)}
-            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
-            aria-label="Filter Jenis Obat"
-          >
-            <option value="all">Semua Obat</option>
-            {obatOptions.map(obat => (
-              <option key={obat} value={obat}>
-                {obat}
-              </option>
-            ))}
-          </select>
-          <div
-            className={`h-11 sm:h-10 px-3 sm:px-3.5 rounded-xl border bg-white flex items-center justify-center sm:justify-start gap-2 shadow-2xs transition-all ${
-              filterObat !== 'all'
-                ? 'border-brand-700 bg-brand-50/40 text-brand-900 font-semibold'
-                : 'border-stone-200 text-stone-700 hover:border-stone-300'
-            }`}
-          >
-            <i className="fa-solid fa-flask-vial text-brand-800 text-xs sm:text-sm"></i>
-            <span className="hidden sm:inline text-xs sm:text-sm font-medium text-stone-700 truncate max-w-[120px] lg:max-w-none">
-              {filterObat === 'all' ? 'Semua Obat' : filterObat}
-            </span>
-            <i className="hidden sm:inline fa-solid fa-chevron-down text-[10px] text-stone-400 ml-0.5"></i>
-            {filterObat !== 'all' && (
-              <span className="sm:hidden absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full bg-brand-700"></span>
-            )}
-          </div>
-        </div>
+        <CustomSelect
+          value={filterObat}
+          onChange={(val) => setFilterObat(val as string)}
+          options={[
+            { value: 'all', label: 'Semua Obat' },
+            ...obatOptions.map((o) => ({ value: o, label: o })),
+          ]}
+          icon="fa-flask-vial"
+          variant="pill"
+          compactOnMobile={true}
+          isActiveHighlight={filterObat !== 'all'}
+          title="Filter Jenis Obat"
+        />
       </div>
 
       {/* ─── EMPTY STATE IF FILTERS RETURN ZERO ─── */}

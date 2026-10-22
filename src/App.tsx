@@ -26,6 +26,7 @@ import { BottomNavDock } from './components/BottomNavDock';
 import { SPKPublicPreview } from './components/SPKPublicPreview';
 import { AdminDeleteConfirmationModal } from './components/AdminDeleteConfirmationModal';
 import { LandingPage } from './components/LandingPage';
+import { CustomSelect } from './components/ui/CustomSelect';
 
 export const App: React.FC = () => {
   // Sesi Keamanan Login PIN Wajib
@@ -579,15 +580,18 @@ export const App: React.FC = () => {
               <span className="text-stone-300 hidden sm:inline">•</span>
               <div className="hidden sm:flex items-center gap-1.5">
                 <span className="text-stone-400">Tampilkan:</span>
-                <select
-                  value={itemsPerPage}
-                  onChange={(e) => setItemsPerPage(Number(e.target.value))}
-                  className="bg-stone-50 border border-stone-200 rounded-lg px-2 py-1 text-xs font-semibold text-stone-800 focus:outline-none"
-                >
-                  <option value={5}>5</option>
-                  <option value={10}>10</option>
-                  <option value={20}>20</option>
-                </select>
+                <div className="w-20">
+                  <CustomSelect
+                    value={itemsPerPage}
+                    onChange={(val) => setItemsPerPage(Number(val))}
+                    options={[
+                      { value: 5, label: '5' },
+                      { value: 10, label: '10' },
+                      { value: 20, label: '20' },
+                    ]}
+                    menuClassName="min-w-[80px]"
+                  />
+                </div>
               </div>
             </div>
 
