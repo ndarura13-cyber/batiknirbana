@@ -248,137 +248,156 @@ export const LandingGallery: React.FC = () => {
 
   return (
     <div id="portofolio-gallery-top">
-      {/* ─── FILTER & SORT BAR ─── */}
-      <div className="bg-stone-50/90 border border-stone-200/90 rounded-2xl p-4 sm:p-5 mb-8 shadow-xs backdrop-blur-xs">
-        {/* Top Header Row of Filter Bar */}
-        <div className="flex flex-wrap items-center justify-between gap-3 mb-4 pb-3 border-b border-stone-200/70">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-brand-900/10 text-brand-900 flex items-center justify-center text-sm">
-              <i className="fa-solid fa-sliders"></i>
-            </div>
-            <div>
-              <h3 className="text-xs sm:text-sm font-bold text-stone-900 leading-tight">
-                Filter & Urutkan Galeri
-              </h3>
-              <p className="text-[11px] text-stone-500 mt-0.5">
-                Menampilkan{' '}
-                <span className="font-semibold text-brand-900">
-                  {filteredAndSortedItems.length}
-                </span>{' '}
-                dari {items.length} motif
-              </p>
-            </div>
-          </div>
+      {/* ─── SIMPLIFIED FILTER ROW (ICON-ONLY ON MOBILE, INLINE PILLS ON DESKTOP) ─── */}
+      <div className="flex items-center gap-2 sm:gap-3 mb-6 sm:mb-8 flex-wrap">
+        {/* Sliders / Reset Button */}
+        <button
+          type="button"
+          onClick={handleResetFilters}
+          title={isFilterActive ? 'Klik untuk reset semua filter' : 'Filter Galeri'}
+          className={`h-11 w-11 sm:h-10 sm:w-10 rounded-xl border flex items-center justify-center transition-all shrink-0 ${
+            isFilterActive
+              ? 'bg-brand-900 text-white border-brand-900 shadow-xs hover:bg-brand-950 cursor-pointer'
+              : 'bg-stone-100 text-stone-600 border-stone-200 hover:bg-stone-200'
+          }`}
+          aria-label={isFilterActive ? 'Reset filter' : 'Filter galeri'}
+        >
+          <i className={`fa-solid ${isFilterActive ? 'fa-rotate-left' : 'fa-sliders'} text-xs sm:text-sm`}></i>
+        </button>
 
-          {isFilterActive && (
-            <button
-              onClick={handleResetFilters}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-stone-600 hover:text-brand-900 bg-white hover:bg-stone-100 border border-stone-200 rounded-xl transition-all shadow-2xs"
-            >
-              <i className="fa-solid fa-rotate-left text-[11px] text-brand-700"></i>
-              Reset Filter
-            </button>
-          )}
+        {/* 1. Urutkan */}
+        <div className="relative flex-1 sm:flex-none">
+          <select
+            value={sortBy}
+            onChange={e => setSortBy(e.target.value as SortOption)}
+            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+            aria-label="Urutkan Portofolio"
+          >
+            <option value="newest">Waktu SPK (Terbaru)</option>
+            <option value="oldest">Waktu SPK (Terlama)</option>
+            <option value="az">Abjad (A - Z)</option>
+            <option value="za">Abjad (Z - A)</option>
+          </select>
+          <div
+            className={`h-11 sm:h-10 px-3 sm:px-3.5 rounded-xl border bg-white flex items-center justify-center sm:justify-start gap-2 shadow-2xs transition-all ${
+              sortBy !== 'newest'
+                ? 'border-brand-700 bg-brand-50/40 text-brand-900 font-semibold'
+                : 'border-stone-200 text-stone-700 hover:border-stone-300'
+            }`}
+          >
+            <i className="fa-solid fa-arrow-down-short-wide text-brand-800 text-xs sm:text-sm"></i>
+            <span className="hidden sm:inline text-xs sm:text-sm font-medium text-stone-700 truncate max-w-[130px] lg:max-w-none">
+              {sortBy === 'newest'
+                ? 'Waktu SPK (Terbaru)'
+                : sortBy === 'oldest'
+                ? 'Waktu SPK (Terlama)'
+                : sortBy === 'az'
+                ? 'Abjad (A - Z)'
+                : 'Abjad (Z - A)'}
+            </span>
+            <i className="hidden sm:inline fa-solid fa-chevron-down text-[10px] text-stone-400 ml-0.5"></i>
+            {sortBy !== 'newest' && (
+              <span className="sm:hidden absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full bg-brand-700"></span>
+            )}
+          </div>
         </div>
 
-        {/* Dropdown Filters Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-          {/* 1. Urutkan */}
-          <div>
-            <label className="block text-[11px] font-bold uppercase tracking-wider text-stone-600 mb-1.5">
-              <i className="fa-solid fa-arrow-down-short-wide text-brand-700 mr-1.5"></i>
-              Urutkan
-            </label>
-            <div className="relative">
-              <select
-                value={sortBy}
-                onChange={e => setSortBy(e.target.value as SortOption)}
-                className="w-full appearance-none bg-white border border-stone-300 text-stone-800 text-xs sm:text-sm rounded-xl px-3 py-2.5 pr-8 focus:outline-none focus:ring-2 focus:ring-brand-700 focus:border-brand-700 font-medium cursor-pointer shadow-2xs transition-colors"
-              >
-                <option value="newest">Waktu SPK (Terbaru)</option>
-                <option value="oldest">Waktu SPK (Terlama)</option>
-                <option value="az">Abjad Motif (A - Z)</option>
-                <option value="za">Abjad Motif (Z - A)</option>
-              </select>
-              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2.5 text-stone-400">
-                <i className="fa-solid fa-chevron-down text-xs"></i>
-              </div>
-            </div>
+        {/* 2. Nama Pemesan */}
+        <div className="relative flex-1 sm:flex-none">
+          <select
+            value={filterPemesan}
+            onChange={e => setFilterPemesan(e.target.value)}
+            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+            aria-label="Filter Nama Pemesan"
+          >
+            <option value="all">Semua Pemesan</option>
+            {pemesanOptions.map(pemesan => (
+              <option key={pemesan} value={pemesan}>
+                {pemesan}
+              </option>
+            ))}
+          </select>
+          <div
+            className={`h-11 sm:h-10 px-3 sm:px-3.5 rounded-xl border bg-white flex items-center justify-center sm:justify-start gap-2 shadow-2xs transition-all ${
+              filterPemesan !== 'all'
+                ? 'border-brand-700 bg-brand-50/40 text-brand-900 font-semibold'
+                : 'border-stone-200 text-stone-700 hover:border-stone-300'
+            }`}
+          >
+            <i className="fa-solid fa-user text-brand-800 text-xs sm:text-sm"></i>
+            <span className="hidden sm:inline text-xs sm:text-sm font-medium text-stone-700 truncate max-w-[120px] lg:max-w-none">
+              {filterPemesan === 'all' ? 'Semua Pemesan' : filterPemesan}
+            </span>
+            <i className="hidden sm:inline fa-solid fa-chevron-down text-[10px] text-stone-400 ml-0.5"></i>
+            {filterPemesan !== 'all' && (
+              <span className="sm:hidden absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full bg-brand-700"></span>
+            )}
           </div>
+        </div>
 
-          {/* 2. Nama Pemesan */}
-          <div>
-            <label className="block text-[11px] font-bold uppercase tracking-wider text-stone-600 mb-1.5">
-              <i className="fa-solid fa-user-tag text-brand-700 mr-1.5"></i>
-              Nama Pemesan
-            </label>
-            <div className="relative">
-              <select
-                value={filterPemesan}
-                onChange={e => setFilterPemesan(e.target.value)}
-                className="w-full appearance-none bg-white border border-stone-300 text-stone-800 text-xs sm:text-sm rounded-xl px-3 py-2.5 pr-8 focus:outline-none focus:ring-2 focus:ring-brand-700 focus:border-brand-700 font-medium cursor-pointer shadow-2xs transition-colors"
-              >
-                <option value="all">Semua Pemesan</option>
-                {pemesanOptions.map(pemesan => (
-                  <option key={pemesan} value={pemesan}>
-                    {pemesan}
-                  </option>
-                ))}
-              </select>
-              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2.5 text-stone-400">
-                <i className="fa-solid fa-chevron-down text-xs"></i>
-              </div>
-            </div>
+        {/* 3. Jenis Kain */}
+        <div className="relative flex-1 sm:flex-none">
+          <select
+            value={filterBahan}
+            onChange={e => setFilterBahan(e.target.value)}
+            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+            aria-label="Filter Jenis Kain"
+          >
+            <option value="all">Semua Kain</option>
+            {bahanOptions.map(bahan => (
+              <option key={bahan} value={bahan}>
+                {bahan}
+              </option>
+            ))}
+          </select>
+          <div
+            className={`h-11 sm:h-10 px-3 sm:px-3.5 rounded-xl border bg-white flex items-center justify-center sm:justify-start gap-2 shadow-2xs transition-all ${
+              filterBahan !== 'all'
+                ? 'border-brand-700 bg-brand-50/40 text-brand-900 font-semibold'
+                : 'border-stone-200 text-stone-700 hover:border-stone-300'
+            }`}
+          >
+            <i className="fa-solid fa-layer-group text-brand-800 text-xs sm:text-sm"></i>
+            <span className="hidden sm:inline text-xs sm:text-sm font-medium text-stone-700 truncate max-w-[120px] lg:max-w-none">
+              {filterBahan === 'all' ? 'Semua Kain' : filterBahan}
+            </span>
+            <i className="hidden sm:inline fa-solid fa-chevron-down text-[10px] text-stone-400 ml-0.5"></i>
+            {filterBahan !== 'all' && (
+              <span className="sm:hidden absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full bg-brand-700"></span>
+            )}
           </div>
+        </div>
 
-          {/* 3. Jenis Kain */}
-          <div>
-            <label className="block text-[11px] font-bold uppercase tracking-wider text-stone-600 mb-1.5">
-              <i className="fa-solid fa-layer-group text-brand-700 mr-1.5"></i>
-              Jenis Kain
-            </label>
-            <div className="relative">
-              <select
-                value={filterBahan}
-                onChange={e => setFilterBahan(e.target.value)}
-                className="w-full appearance-none bg-white border border-stone-300 text-stone-800 text-xs sm:text-sm rounded-xl px-3 py-2.5 pr-8 focus:outline-none focus:ring-2 focus:ring-brand-700 focus:border-brand-700 font-medium cursor-pointer shadow-2xs transition-colors"
-              >
-                <option value="all">Semua Kain</option>
-                {bahanOptions.map(bahan => (
-                  <option key={bahan} value={bahan}>
-                    {bahan}
-                  </option>
-                ))}
-              </select>
-              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2.5 text-stone-400">
-                <i className="fa-solid fa-chevron-down text-xs"></i>
-              </div>
-            </div>
-          </div>
-
-          {/* 4. Jenis Obat */}
-          <div>
-            <label className="block text-[11px] font-bold uppercase tracking-wider text-stone-600 mb-1.5">
-              <i className="fa-solid fa-flask-vial text-brand-700 mr-1.5"></i>
-              Jenis Obat
-            </label>
-            <div className="relative">
-              <select
-                value={filterObat}
-                onChange={e => setFilterObat(e.target.value)}
-                className="w-full appearance-none bg-white border border-stone-300 text-stone-800 text-xs sm:text-sm rounded-xl px-3 py-2.5 pr-8 focus:outline-none focus:ring-2 focus:ring-brand-700 focus:border-brand-700 font-medium cursor-pointer shadow-2xs transition-colors"
-              >
-                <option value="all">Semua Obat</option>
-                {obatOptions.map(obat => (
-                  <option key={obat} value={obat}>
-                    {obat}
-                  </option>
-                ))}
-              </select>
-              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2.5 text-stone-400">
-                <i className="fa-solid fa-chevron-down text-xs"></i>
-              </div>
-            </div>
+        {/* 4. Jenis Obat */}
+        <div className="relative flex-1 sm:flex-none">
+          <select
+            value={filterObat}
+            onChange={e => setFilterObat(e.target.value)}
+            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+            aria-label="Filter Jenis Obat"
+          >
+            <option value="all">Semua Obat</option>
+            {obatOptions.map(obat => (
+              <option key={obat} value={obat}>
+                {obat}
+              </option>
+            ))}
+          </select>
+          <div
+            className={`h-11 sm:h-10 px-3 sm:px-3.5 rounded-xl border bg-white flex items-center justify-center sm:justify-start gap-2 shadow-2xs transition-all ${
+              filterObat !== 'all'
+                ? 'border-brand-700 bg-brand-50/40 text-brand-900 font-semibold'
+                : 'border-stone-200 text-stone-700 hover:border-stone-300'
+            }`}
+          >
+            <i className="fa-solid fa-flask-vial text-brand-800 text-xs sm:text-sm"></i>
+            <span className="hidden sm:inline text-xs sm:text-sm font-medium text-stone-700 truncate max-w-[120px] lg:max-w-none">
+              {filterObat === 'all' ? 'Semua Obat' : filterObat}
+            </span>
+            <i className="hidden sm:inline fa-solid fa-chevron-down text-[10px] text-stone-400 ml-0.5"></i>
+            {filterObat !== 'all' && (
+              <span className="sm:hidden absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full bg-brand-700"></span>
+            )}
           </div>
         </div>
       </div>
